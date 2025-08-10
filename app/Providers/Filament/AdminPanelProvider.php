@@ -30,7 +30,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->registration()
             ->brandName('SMART Pendaftaran')
             ->favicon(asset('images/tunas-bangsa-deces.jpeg'))
             ->colors([
