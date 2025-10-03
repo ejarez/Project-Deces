@@ -21,47 +21,47 @@ export function PendaftaranForm() {
                 <div className="mx-auto max-w-3xl">
                     <Card className="mb-8 shadow-xl bg-white/5 backdrop-blur-sm border-white/10">
                         <CardHeader className="text-white">
-                            <CardTitle className="text-2xl">Metode SMART</CardTitle>
+                            <CardTitle className="text-2xl">Metode SMART (Simple, Multi, Attribute, Rating, Technique)</CardTitle>
                             <CardDescription className="text-gray-200">
-                                Pendaftaran ini menggunakan metode SMART untuk membantu kamu memilih jurusan yang tepat dan sesuai dengan potensimu.
+                                Pendaftaran ini menggunakan metode SMART untuk membantu kamu memilih jurusan yang tepat melalui 5 komponen penilaian yang objektif dan terstruktur.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="pt-6">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                                 <div className="p-4 border border-l-4 border-l-blue-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
                                     <h3 className="font-bold text-white flex items-center gap-2">
                                         <span className="bg-blue-500/30 text-blue-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">S</span>
-                                        Specific
+                                        Simple
                                     </h3>
-                                    <p className="text-sm text-gray-300 mt-2">Tentukan tujuan pendidikan dan karir yang spesifik</p>
+                                    <p className="text-sm text-gray-300 mt-2">Proses evaluasi yang sederhana dan mudah dipahami</p>
                                 </div>
-                                <div className="p-4 border border-l-4 border-l-blue-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
+                                <div className="p-4 border border-l-4 border-l-emerald-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
                                     <h3 className="font-bold text-white flex items-center gap-2">
-                                        <span className="bg-blue-500/30 text-blue-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">M</span>
-                                        Measurable
+                                        <span className="bg-emerald-500/30 text-emerald-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">M</span>
+                                        Multi
                                     </h3>
-                                    <p className="text-sm text-gray-300 mt-2">Nilai dan kemampuan yang dapat diukur untuk mencapai tujuan</p>
+                                    <p className="text-sm text-gray-300 mt-2">Mempertimbangkan berbagai aspek dan perspektif</p>
                                 </div>
-                                <div className="p-4 border border-l-4 border-l-blue-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
+                                <div className="p-4 border border-l-4 border-l-violet-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
                                     <h3 className="font-bold text-white flex items-center gap-2">
-                                        <span className="bg-blue-500/30 text-blue-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">A</span>
-                                        Achievable
+                                        <span className="bg-violet-500/30 text-violet-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">A</span>
+                                        Attribute
                                     </h3>
-                                    <p className="text-sm text-gray-300 mt-2">Pilihan jurusan yang sesuai dengan kemampuan dan minat</p>
+                                    <p className="text-sm text-gray-300 mt-2">Fokus pada atribut-atribut spesifik yang relevan</p>
                                 </div>
-                                <div className="p-4 border border-l-4 border-l-blue-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
+                                <div className="p-4 border border-l-4 border-l-amber-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
                                     <h3 className="font-bold text-white flex items-center gap-2">
-                                        <span className="bg-blue-500/30 text-blue-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">R</span>
-                                        Relevant
+                                        <span className="bg-amber-500/30 text-amber-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">R</span>
+                                        Rating
                                     </h3>
-                                    <p className="text-sm text-gray-300 mt-2">Kesesuaian dengan minat, bakat, dan tujuan karir</p>
+                                    <p className="text-sm text-gray-300 mt-2">Sistem rating numerik untuk setiap kriteria</p>
                                 </div>
-                                <div className="p-4 border border-l-4 border-l-blue-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm md:col-span-2">
+                                <div className="p-4 border border-l-4 border-l-rose-500 rounded-md bg-white/10 backdrop-blur-sm shadow-sm">
                                     <h3 className="font-bold text-white flex items-center gap-2">
-                                        <span className="bg-blue-500/30 text-blue-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">T</span>
-                                        Time-bound
+                                        <span className="bg-rose-500/30 text-rose-200 w-7 h-7 rounded-full flex items-center justify-center text-sm">T</span>
+                                        Technique
                                     </h3>
-                                    <p className="text-sm text-gray-300 mt-2">Rencana studi dengan target waktu yang jelas dan terukur</p>
+                                    <p className="text-sm text-gray-300 mt-2">Teknik yang terbukti efektif untuk pengambilan keputusan</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -71,7 +71,7 @@ export function PendaftaranForm() {
                         <CardHeader className="text-white">
                             <CardTitle className="text-2xl">Formulir Pendaftaran</CardTitle>
                             <CardDescription className="text-gray-200">
-                                Lengkapi data diri dan analisis SMART untuk mendapatkan rekomendasi jurusan terbaik.
+                                Lengkapi data diri dan penilaian menggunakan 5 komponen metode SMART untuk mendapatkan rekomendasi jurusan terbaik.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="pt-6">
@@ -115,151 +115,221 @@ export function PendaftaranForm() {
                                 </div>
 
                                 <div className="pt-4">
-                                    <h3 className="text-xl font-bold mb-6 text-white text-center">Analisis SMART untuk Pemilihan Jurusan</h3>
+                                    <h3 className="text-xl font-bold mb-6 text-white text-center">Penilaian dengan 5 Komponen Metode SMART</h3>
 
                                     <div className="space-y-6">
                                         <div className="bg-blue-900/20 p-5 rounded-lg border border-blue-500/30">
                                             <div className="flex items-center gap-3 mb-4">
                                                 <span className="bg-blue-500/30 text-blue-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">S</span>
-                                                <Label htmlFor="specific-goal" className="font-semibold text-white text-lg">Specific: Tujuan Spesifik</Label>
+                                                <Label htmlFor="simple-evaluation" className="font-semibold text-white text-lg">Simple: Evaluasi Sederhana</Label>
                                             </div>
-                                            <p className="text-gray-300 mb-3 text-sm">Tentukan tujuan pendidikan dan karir yang spesifik yang ingin kamu capai.</p>
-                                            <Textarea
-                                                id="specific-goal"
-                                                placeholder="Contoh: Menjadi programmer di perusahaan teknologi dalam 5 tahun dengan spesialisasi pengembangan aplikasi mobile"
-                                                className="border-blue-500/30 placeholder:!text-gray-300 !bg-white/10 text-white"
-                                                rows={4}
-                                            />
-                                        </div>
-
-                                        <div className="bg-blue-900/20 p-5 rounded-lg border border-blue-500/30">
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <span className="bg-blue-500/30 text-blue-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">M</span>
-                                                <Label htmlFor="measurable" className="font-semibold text-white text-lg">Measurable: Kemampuan Terukur</Label>
-                                            </div>
-                                            <p className="text-gray-300 mb-3 text-sm">Nilai akademis dan kemampuan yang dapat diukur untuk mencapai tujuanmu.</p>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="nilai-matematika" className="text-gray-300 font-medium">Nilai Matematika</Label>
-                                                    <Input id="nilai-matematika" placeholder="Nilai rata-rata" className="border-blue-500/30 placeholder:!text-gray-300 bg-white/10 text-white" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="nilai-bahasa" className="text-gray-300 font-medium">Nilai Bahasa</Label>
-                                                    <Input id="nilai-bahasa" placeholder="Nilai rata-rata" className="border-blue-500/30 placeholder:!text-gray-300 bg-white/10 text-white" />
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="nilai-ipa" className="text-gray-300 font-medium">Nilai IPA</Label>
-                                                    <Input id="nilai-ipa" placeholder="Nilai rata-rata" className="border-blue-500/30 placeholder:!text-gray-300 bg-white/10 text-white" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="nilai-ips" className="text-gray-300 font-medium">Nilai IPS</Label>
-                                                    <Input id="nilai-ips" placeholder="Nilai rata-rata" className="border-blue-500/30 placeholder:!text-gray-300 bg-white/10 text-white" />
-                                                </div>
+                                            <p className="text-gray-300 mb-3 text-sm">Bagaimana tingkat kesulitan pembelajaran jurusan ini menurutmu? (Skala 1-5, 1 = Sangat Mudah, 5 = Sangat Sulit)</p>
+                                            <div className="grid grid-cols-5 gap-2 mb-3">
+                                                {[1, 2, 3, 4, 5].map((rating) => (
+                                                    <label key={rating} className="flex flex-col items-center p-2 border border-blue-500/30 rounded cursor-pointer hover:bg-blue-500/20">
+                                                        <input type="radio" name="simple-rating" value={rating} className="sr-only" />
+                                                        <span className="text-white font-bold">{rating}</span>
+                                                        <span className="text-xs text-gray-300">{rating === 1 ? 'Mudah' : rating === 5 ? 'Sulit' : ''}</span>
+                                                    </label>
+                                                ))}
                                             </div>
                                         </div>
 
-                                        <div className="bg-blue-900/20 p-5 rounded-lg border border-blue-500/30">
+                                        <div className="bg-emerald-900/20 p-5 rounded-lg border border-emerald-500/30">
                                             <div className="flex items-center gap-3 mb-4">
-                                                <span className="bg-blue-500/30 text-blue-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">A</span>
-                                                <Label htmlFor="achievable" className="font-semibold text-white text-lg">Achievable: Kemampuan & Minat</Label>
+                                                <span className="bg-emerald-500/30 text-emerald-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">M</span>
+                                                <Label htmlFor="multi" className="font-semibold text-white text-lg">Multi: Penilaian Beragam</Label>
                                             </div>
-                                            <p className="text-gray-300 mb-3 text-sm">Identifikasi kemampuan dan minat yang kamu miliki untuk mencapai tujuanmu.</p>
+                                            <p className="text-gray-300 mb-3 text-sm">Beri rating untuk berbagai aspek berikut (Skala 1-5, 1 = Sangat Rendah, 5 = Sangat Tinggi)</p>
+                                            <div className="space-y-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Minat pada Bidang</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-emerald-500/30 rounded cursor-pointer hover:bg-emerald-500/20">
+                                                                    <input type="radio" name="minat-rating" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Kemampuan Akademik</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-emerald-500/30 rounded cursor-pointer hover:bg-emerald-500/20">
+                                                                    <input type="radio" name="akademik-rating" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Prospek Karir</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-emerald-500/30 rounded cursor-pointer hover:bg-emerald-500/20">
+                                                                    <input type="radio" name="karir-rating" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Kesesuaian Bakat</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-emerald-500/30 rounded cursor-pointer hover:bg-emerald-500/20">
+                                                                    <input type="radio" name="bakat-rating" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-violet-900/20 p-5 rounded-lg border border-violet-500/30">
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <span className="bg-violet-500/30 text-violet-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">A</span>
+                                                <Label htmlFor="attribute" className="font-semibold text-white text-lg">Attribute: Atribut Spesifik</Label>
+                                            </div>
+                                            <p className="text-gray-300 mb-3 text-sm">Beri rating untuk atribut-atribut spesifik berikut (Skala 1-5, 1 = Sangat Rendah, 5 = Sangat Tinggi)</p>
+                                            <div className="space-y-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Kemampuan Teknis</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-violet-500/30 rounded cursor-pointer hover:bg-violet-500/20">
+                                                                    <input type="radio" name="teknis-weight" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Kreativitas</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-violet-500/30 rounded cursor-pointer hover:bg-violet-500/20">
+                                                                    <input type="radio" name="kreativitas-weight" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Komunikasi</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-violet-500/30 rounded cursor-pointer hover:bg-violet-500/20">
+                                                                    <input type="radio" name="komunikasi-weight" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Problem Solving</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-violet-500/30 rounded cursor-pointer hover:bg-violet-500/20">
+                                                                    <input type="radio" name="problemsolving-weight" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-amber-900/20 p-5 rounded-lg border border-amber-500/30">
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <span className="bg-amber-500/30 text-amber-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">R</span>
+                                                <Label htmlFor="rating" className="font-semibold text-white text-lg">Rating: Sistem Penilaian</Label>
+                                            </div>
+                                            <p className="text-gray-300 mb-3 text-sm">Beri rating untuk jurusan yang dipilih berdasarkan kriteria berikut (Skala 1-5, 1 = Sangat Buruk, 5 = Sangat Baik)</p>
+                                            <div className="space-y-4">
+                                                <Select>
+                                                    <SelectTrigger className="border-amber-500/30 bg-white/10 text-white">
+                                                        <SelectValue placeholder="Pilih jurusan" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="keperawatan">Keperawatan</SelectItem>
+                                                        <SelectItem value="farmasi">Farmasi</SelectItem>
+                                                        <SelectItem value="analis-kesehatan">Analis Kesehatan / TLM</SelectItem>
+                                                        <SelectItem value="dkv">Desain Komunikasi Visual (DKV)</SelectItem>
+                                                        <SelectItem value="tata-kecantikan">Tata Kecantikan</SelectItem>
+                                                        <SelectItem value="tata-boga">Tata Boga</SelectItem>
+                                                        <SelectItem value="rpl">Rekayasa Perangkat Lunak (RPL)</SelectItem>
+                                                        <SelectItem value="tkj">Teknik Komputer dan Jaringan (TKJ)</SelectItem>
+                                                        <SelectItem value="tkr">Teknik Kendaraan Ringan (TKR)</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Kesesuaian Minat</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-amber-500/30 rounded cursor-pointer hover:bg-amber-500/20">
+                                                                    <input type="radio" name="minat-jurusan-rating" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Label className="text-gray-300 font-medium">Prospek Karir</Label>
+                                                        <div className="grid grid-cols-5 gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                <label key={rating} className="flex justify-center p-1 border border-amber-500/30 rounded cursor-pointer hover:bg-amber-500/20">
+                                                                    <input type="radio" name="prospek-jurusan-rating" value={rating} className="sr-only" />
+                                                                    <span className="text-white text-xs">{rating}</span>
+                                                                </label>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-rose-900/20 p-5 rounded-lg border border-rose-500/30">
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <span className="bg-rose-500/30 text-rose-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">T</span>
+                                                <Label htmlFor="technique" className="font-semibold text-white text-lg">Technique: Kesimpulan & Rekomendasi</Label>
+                                            </div>
+                                            <p className="text-gray-300 mb-3 text-sm">Berdasarkan 5 komponen penilaian SMART, berikan kesimpulan dan rekomendasi untuk pemilihan jurusan.</p>
                                             <div className="space-y-4">
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="kemampuan" className="text-gray-300 font-medium">Kemampuan yang Kamu Miliki</Label>
+                                                    <Label htmlFor="kesimpulan-smart" className="text-gray-300 font-medium">Kesimpulan Penilaian SMART</Label>
                                                     <Textarea
-                                                        id="kemampuan"
-                                                        placeholder="Contoh: pemrograman, desain, analisis data, komunikasi"
-                                                        className="border-blue-500/30 placeholder:!text-gray-300 !bg-white/10 text-white"
+                                                        id="kesimpulan-smart"
+                                                        placeholder="Berdasarkan 5 komponen penilaian SMART, jurusan yang paling sesuai adalah..."
+                                                        className="border-rose-500/30 placeholder:!text-gray-300 !bg-white/10 text-white"
+                                                        rows={3}
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="minat" className="text-gray-300 font-medium">Minat dan Hobi</Label>
+                                                    <Label htmlFor="rekomendasi" className="text-gray-300 font-medium">Rekomendasi & Alasan</Label>
                                                     <Textarea
-                                                        id="minat"
-                                                        placeholder="Contoh: teknologi, membaca, menulis, fotografi"
-                                                        className="border-blue-500/30 placeholder:!text-gray-300 !bg-white/10 text-white"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="bg-blue-900/20 p-5 rounded-lg border border-blue-500/30">
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <span className="bg-blue-500/30 text-blue-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">R</span>
-                                                <Label htmlFor="jurusan" className="font-semibold text-white text-lg">Relevant: Pilihan Jurusan</Label>
-                                            </div>
-                                            <p className="text-gray-300 mb-3 text-sm">Pilih jurusan yang relevan dengan minat, bakat, dan tujuan karirmu.</p>
-                                            <Select>
-                                                <SelectTrigger className="border-blue-500/30 bg-white/10 text-white">
-                                                    <SelectValue placeholder="Pilih jurusan" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="ipa">Ilmu Pengetahuan Alam (IPA)</SelectItem>
-                                                    <SelectItem value="ips">Ilmu Pengetahuan Sosial (IPS)</SelectItem>
-                                                    <SelectItem value="tkj">Teknik Komputer dan Jaringan (TKJ)</SelectItem>
-                                                    <SelectItem value="rpl">Rekayasa Perangkat Lunak (RPL)</SelectItem>
-                                                    <SelectItem value="multimedia">Multimedia</SelectItem>
-                                                    <SelectItem value="akuntansi">Akuntansi</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <div className="mt-4">
-                                                <Label htmlFor="alasan-relevant" className="text-gray-300 font-medium">Alasan Relevansi</Label>
-                                                <Textarea
-                                                    id="alasan-relevant"
-                                                    placeholder="Jelaskan mengapa jurusan ini relevan dengan minat, bakat, dan tujuan karirmu"
-                                                    className="border-blue-500/30 mt-1 placeholder:!text-gray-300 !bg-white/10 text-white"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="bg-blue-900/20 p-5 rounded-lg border border-blue-500/30">
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <span className="bg-blue-500/30 text-blue-200 w-8 h-8 rounded-full flex items-center justify-center font-bold">T</span>
-                                                <Label htmlFor="timebound" className="font-semibold text-white text-lg">Time-bound: Rencana Waktu</Label>
-                                            </div>
-                                            <p className="text-gray-300 mb-3 text-sm">Tetapkan target pencapaian dalam program studi 3 tahun.</p>
-                                            <div className="space-y-4">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="tingkat-kelas" className="text-gray-300 font-medium">Tingkat yang Dituju</Label>
-                                                    <Select>
-                                                        <SelectTrigger className="border-blue-500/30 bg-white/10 text-white">
-                                                            <SelectValue placeholder="Pilih tingkat kelas" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="10">Kelas 10</SelectItem>
-                                                            <SelectItem value="11">Kelas 11</SelectItem>
-                                                            <SelectItem value="12">Kelas 12</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="target-akademik" className="text-gray-300 font-medium">Target Akademik</Label>
-                                                    <Select>
-                                                        <SelectTrigger className="border-blue-500/30 bg-white/10 text-white">
-                                                            <SelectValue placeholder="Pilih target akademik" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="baik">Baik (Nilai rata-rata 75-85)</SelectItem>
-                                                            <SelectItem value="sangat-baik">Sangat Baik (Nilai rata-rata 86-95)</SelectItem>
-                                                            <SelectItem value="sempurna">Sempurna (Nilai rata-rata &gt; 95)</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="rencana-studi" className="text-gray-300 font-medium">Rencana Pencapaian</Label>
-                                                    <Textarea
-                                                        id="rencana-studi"
-                                                        placeholder="Contoh: Semester 1: menguasai dasar-dasar, Semester 2: mengembangkan keahlian spesifik..."
-                                                        className="border-blue-500/30 placeholder:!text-gray-300 !bg-white/10 text-white"
+                                                        id="rekomendasi"
+                                                        placeholder="Rekomendasi jurusan berdasarkan skor tertinggi dan kesesuaian dengan profil siswa..."
+                                                        className="border-rose-500/30 placeholder:!text-gray-300 !bg-white/10 text-white"
+                                                        rows={3}
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
                                                     <Label htmlFor="target-kelulusan" className="text-gray-300 font-medium">Target Pasca Kelulusan</Label>
                                                     <Select>
-                                                        <SelectTrigger className="border-blue-500/30 bg-white/10 text-white">
+                                                        <SelectTrigger className="border-rose-500/30 bg-white/10 text-white">
                                                             <SelectValue placeholder="Pilih target setelah lulus" />
                                                         </SelectTrigger>
                                                         <SelectContent>

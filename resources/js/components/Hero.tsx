@@ -11,14 +11,14 @@ export function Hero() {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
-                            Pendekatan SMART untuk Masa Depan
+                            Metode SMART (Simple, Multi, Attribute, Rating, Technique)
                         </div>
                         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-white">
                             Tentukan Masa Depanmu dengan Jurusan yang Tepat
                         </h1>
                         <p className="text-gray-300 text-lg md:text-xl max-w-xl">
                             Kami membantu kamu menemukan jurusan yang sesuai dengan minat dan bakatmu
-                            melalui pendekatan SMART untuk kesuksesan akademik dan karir.
+                            melalui metode SMART (Simple, Multi, Attribute, Rating, Technique) untuk pemilihan jurusan yang tepat.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3">
                             <Button onClick={() => window.location.href = '#jurusan'} size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-6 text-lg cursor-pointer">
@@ -41,7 +41,7 @@ export function Hero() {
                                 ))}
                             </div>
                             <div className="text-gray-300 text-sm">
-                                <span className="font-bold text-white">500+ siswa</span> telah menemukan jurusan terbaik mereka
+                                <span className="font-bold text-white">500+ siswa</span> telah menemukan jurusan terbaik melalui SMART
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@ export function Hero() {
                         <div className="absolute -top-4 -left-4 w-24 h-24 bg-blue-500/20 rounded-full blur-xl"></div>
                         <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-indigo-500/20 rounded-full blur-xl"></div>
                         <img
-                            src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000"
+                            src="./images/gedung-deces.jpeg"
                             alt="Siswa belajar"
                             className="mx-auto rounded-xl object-cover object-center w-full h-[500px] shadow-2xl border border-white/10"
                         />
@@ -61,8 +61,8 @@ export function Hero() {
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-slate-800">Pendekatan SMART</h3>
-                                    <p className="text-sm text-slate-600">Specific, Measurable, Achievable, Relevant, Time-bound</p>
+                                    <h3 className="font-bold text-slate-800">Metode SMART</h3>
+                                    <p className="text-sm text-slate-600">Simple, Multi, Attribute, Rating, Technique untuk Pemilihan Jurusan</p>
                                 </div>
                             </div>
                         </div>

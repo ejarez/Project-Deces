@@ -27,7 +27,7 @@ export function Footer() {
                             <span className="text-2xl font-bold text-white">Pemilihan Jurusan</span>
                         </div>
                         <p className="text-gray-400 max-w-md">
-                            Membantu siswa menemukan jurusan yang tepat untuk masa depan yang cerah melalui pendekatan SMART yang terstruktur dan terukur.
+                            Membantu siswa menemukan jurusan yang tepat untuk masa depan yang cerah melalui metode SMART (Simple, Multi, Attribute, Rating, Technique) yang objektif dan terstruktur.
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
