@@ -24,24 +24,32 @@ export function Navbar() {
                                 <path d="M6 12v5c3 3 9 3 12 0v-5" />
                             </svg>
                         </div>
-                        <span className="text-xl font-bold text-white">Pemilihan Jurusan</span>
+                        <span className="text-xl font-bold text-white tracking-wider">SMART Pendaftaran</span>
                     </div>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-8">
-                        <a href="#beranda" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-                            Beranda
-                        </a>
-                        <a href="#jurusan" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-                            Jurusan
-                        </a>
-                        <a href="#pendaftaran" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-                            Pendaftaran
-                        </a>
-                        <a href="#kontak" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-                            Kontak
-                        </a>
-                    </nav>
+                    <div className="hidden md:flex items-center gap-8">
+                        <nav className="flex items-center gap-8">
+                            <a href="#beranda" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                                Beranda
+                            </a>
+                            <a href="#jurusan" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                                Jurusan
+                            </a>
+                            <a href="#pendaftaran" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                                Pendaftaran
+                            </a>
+                            <a href="#kontak" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                                Kontak
+                            </a>
+                        </nav>
+                        <Button 
+                            onClick={() => window.location.href = '/admin/login'}
+                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white cursor-pointer px-5"
+                        >
+                            Masuk Guru/Admin
+                        </Button>
+                    </div>
 
                     {/* Mobile Menu Button */}
                     <button
@@ -96,8 +104,11 @@ export function Navbar() {
                             >
                                 Kontak
                             </a>
-                            <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white w-full">
-                                Masuk
+                            <Button 
+                                onClick={() => window.location.href = '/admin/login'}
+                                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white w-full cursor-pointer"
+                            >
+                                Masuk Guru/Admin
                             </Button>
                         </nav>
                     </div>

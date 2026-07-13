@@ -42,4 +42,45 @@ class CalonSiswa extends Model
     {
         return $this->hasOne(Pendaftaran::class);
     }
+
+    // Menghitung & sinkronisasi otomatis skor SMART
+    protected static function booted()
+    {
+        static::saved(function ($calonSiswa) {
+            $service = new \App\Services\SmartEvaluationService();
+            $score = $service->calculateScore($calonSiswa);
+
+            // Update atau buat record pendaftaran terkait
+            $pendaftaran = $calonSiswa->pendaftaran;
+            if (!$pendaftaran) {
+                $pendaftaran = new Pendaftaran();
+                $pendaftaran->calon_siswa_id = $calonSiswa->id;
+                $pendaftaran->tanggal_pendaftaran = now();
+                $pendaftaran->status_akhir = $calonSiswa->status_pendaftaran;
+            } else {
+                // Sinkronkan status akhir jika status pendaftaran berubah
+                $pendaftaran->status_akhir = $calonSiswa->status_pendaftaran;
+            }
+
+            $pendaftaran->skor_kesesuaian = $score;
+            $pendaftaran->peluang_keberhasilan = (int) $score;
+            $pendaftaran->semester_target_masuk = $calonSiswa->semester_pendaftaran ?? 'Ganjil 2024/2025';
+            $pendaftaran->target_waktu_proses = $pendaftaran->target_waktu_proses ?? 7;
+
+            // Atur rekomendasi jurusan alternatif jika skor kurang
+            if ($score < 70) {
+                $altJurusan = Jurusan::where('id', '!=', $calonSiswa->jurusan_id)
+                    ->orderBy('target_siswa_semester', 'desc')
+                    ->first();
+                if ($altJurusan) {
+                    $pendaftaran->rekomendasi_jurusan_alt = $altJurusan->nama_jurusan;
+                }
+            } else {
+                $pendaftaran->rekomendasi_jurusan_alt = null;
+            }
+
+            $pendaftaran->save();
+        });
+    }
 }
+

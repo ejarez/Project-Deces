@@ -2,203 +2,124 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Award, Target, BookOpen, Layers, DollarSign } from "lucide-react";
 
-const jurusanData = [
-    {
-        id: 1,
-        nama: "Keperawatan",
-        deskripsi: "Jurusan yang mempelajari perawatan pasien, ilmu kesehatan, serta keterampilan medis dasar hingga lanjutan.",
-        prospekKerja: ["Perawat", "Tenaga Medis", "Instruktur Kesehatan", "Caregiver"],
-        prospekKuliah: ["Keperawatan", "Kebidanan", "Ilmu Kesehatan Masyarakat", "Pendidikan Keperawatan"],
+interface JurusanData {
+    id: number;
+    nama_jurusan: string;
+    deskripsi: string;
+    total_siswa: number;
+    rating_rekomendasi: number;
+    target_siswa_semester: number;
+    tingkat_kelulusan: number;
+    prospek_karir: string;
+    durasi_program: number;
+    persyaratan_masuk: string;
+    tingkat_kesulitan: number;
+    kuota_maksimal: number;
+    bobot_matematika: number;
+    bobot_ipa: number;
+    bobot_bahasa: number;
+    bobot_ips: number;
+}
+
+interface JurusanListProps {
+    jurusans: JurusanData[];
+}
+
+// Mapper untuk memperkaya tampilan UI Jurusan
+const jurusanMeta: Record<string, {
+    icon: string;
+    kompetensiUtama: string[];
+    fasilitas: string[];
+    keunggulan: string[];
+    biaya: string;
+    prospekKuliah: string[];
+}> = {
+    "Keperawatan": {
         icon: "🏥",
-        smartRating: {
-            simple: "Proses pembelajaran yang mudah dipahami dengan praktik langsung",
-            multi: "Mempertimbangkan berbagai aspek kompetensi dan kemampuan",
-            attribute: "Fokus pada kemampuan klinis, komunikasi, dan tanggung jawab",
-            rating: "Skala 1-5 untuk setiap kompetensi yang dinilai",
-            technique: "Metode pembelajaran berbasis kasus dan simulasi"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Asuhan Keperawatan Dasar", "Etika Profesi Kesehatan", "Komunikasi Terapeutik", "Teknik Perawatan Pasien"],
-            fasilitas: ["Laboratorium Keperawatan", "Ruang Simulasi Klinik", "Praktik di RS Mitra", "Perpustakaan Kesehatan"],
-            keunggulan: ["Sertifikasi Kompetensi", "Kerjasama dengan Rumah Sakit", "Lulusan Siap Kerja", "Peluang Karir Luas"],
-            biaya: "Rp 1.500.000 - Rp 2.000.000 per semester"
-        }
+        kompetensiUtama: ["Asuhan Keperawatan Dasar", "Etika Profesi Kesehatan", "Komunikasi Terapeutik", "Teknik Perawatan Pasien"],
+        fasilitas: ["Laboratorium Keperawatan", "Ruang Simulasi Klinik", "Praktik di RS Mitra", "Perpustakaan Kesehatan"],
+        keunggulan: ["Sertifikasi Kompetensi Kemenkes", "Kerjasama dengan Rumah Sakit Ternama", "Lulusan Langsung Terserap Kerja", "Peluang Karir Global"],
+        biaya: "Rp 1.500.000 - Rp 2.000.000 per semester",
+        prospekKuliah: ["S1 Keperawatan", "D4 Kebidanan", "Ilmu Kesehatan Masyarakat", "Farmasi Klinik"]
     },
-    {
-        id: 2,
-        nama: "Farmasi",
-        deskripsi: "Jurusan yang mempelajari obat-obatan, kimia farmasi, dan pengelolaan pelayanan farmasi di bidang kesehatan.",
-        prospekKerja: ["Apoteker Asisten", "Analis Obat", "Asisten Laboratorium", "Sales Medis"],
-        prospekKuliah: ["Farmasi", "Kimia", "Bioteknologi", "Ilmu Kesehatan"],
+    "Farmasi": {
         icon: "💊",
-        smartRating: {
-            simple: "Metode pembelajaran yang sistematis dan terstruktur",
-            multi: "Mempertimbangkan berbagai aspek pengetahuan dan praktik",
-            attribute: "Fokus pada identifikasi obat, peracikan, dan etika farmasi",
-            rating: "Penilaian berbasis kompetensi dengan skala 1-5",
-            technique: "Pembelajaran berbasis praktik dan studi kasus"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Identifikasi Obat", "Peracikan Obat", "Manajemen Apotek", "Analisis Kimia Farmasi"],
-            fasilitas: ["Laboratorium Kimia", "Ruang Peracikan", "Apotek Mini", "Perpustakaan Farmasi"],
-            keunggulan: ["Sertifikasi Asisten Apoteker", "Kerjasama dengan Apotek", "Prakiraan Obat Modern", "Lulusan Siap Kerja"],
-            biaya: "Rp 1.600.000 - Rp 2.100.000 per semester"
-        }
+        kompetensiUtama: ["Identifikasi Zat Obat", "Peracikan & Pembuatan Obat", "Manajemen Inventori Apotek", "Farmakologi Dasar"],
+        fasilitas: ["Laboratorium Kimia Farmasi", "Ruang Peracikan & Sterilisasi", "Apotek Simulasi", "Perpustakaan Farmasi"],
+        keunggulan: ["Sertifikasi Asisten Apoteker", "Kerjasama dengan Apotek & Industri Farmasi", "Latihan Pembuatan Kosmetik Herbal", "Prospek Kerja Sangat Stabil"],
+        biaya: "Rp 1.600.000 - Rp 2.100.000 per semester",
+        prospekKuliah: ["S1 Farmasi", "Kimia Murni", "Bioteknologi", "Pendidikan Apoteker"]
     },
-    {
-        id: 3,
-        nama: "Analis Kesehatan / TLM",
-        deskripsi: "Jurusan yang mempelajari pemeriksaan laboratorium untuk diagnosis penyakit dan penelitian medis.",
-        prospekKerja: ["Analis Laboratorium Medis", "Teknisi Lab", "Quality Control", "Petugas Klinik"],
-        prospekKuliah: ["Teknologi Laboratorium Medis", "Biologi", "Kedokteran", "Kesehatan Masyarakat"],
+    "Analis Kesehatan / TLM": {
         icon: "🧪",
-        smartRating: {
-            simple: "Pembelajaran step-by-step dengan praktik langsung",
-            multi: "Mempertimbangkan berbagai aspek pengetahuan dan keterampilan",
-            attribute: "Fokus pada analisis sampel, pengoperasian alat, dan interpretasi",
-            rating: "Evaluasi melalui uji kompetensi dan praktik laboratorium",
-            technique: "Metode pembelajaran hands-on dengan alat modern"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Analisis Sampel Biologis", "Pengoperasian Alat Lab", "Interpretasi Hasil", "Quality Control"],
-            fasilitas: ["Laboratorium Medis", "Mikroskop Digital", "Alat Analisis Modern", "Ruang Steril"],
-            keunggulan: ["Sertifikasi Analis Kesehatan", "Kerjasama dengan Lab Klinis", "Teknologi Terbaru", "Peluang Kerja Tinggi"],
-            biaya: "Rp 1.700.000 - Rp 2.200.000 per semester"
-        }
+        kompetensiUtama: ["Analisis Sampel Biologis", "Hematologi & Kimia Klinik", "Pengoperasian Alat Lab Modern", "Quality Control Laboratorium"],
+        fasilitas: ["Laboratorium Patologi Klinik", "Mikroskop Binokuler & Digital", "Alat Analisis Darah Otomatis", "Ruang Media & Sterilisasi"],
+        keunggulan: ["Sertifikasi Kompetensi Analis", "Kerjasama dengan Laboratorium Klinik Nasional", "Keterampilan Teknik Tinggi", "Tingkat Kebutuhan Lulusan Tinggi"],
+        biaya: "Rp 1.700.000 - Rp 2.200.000 per semester",
+        prospekKuliah: ["D4 Teknologi Laboratorium Medis", "Biomedis", "Kedokteran", "Kesehatan Masyarakat"]
     },
-    {
-        id: 4,
-        nama: "Desain Komunikasi Visual (DKV)",
-        deskripsi: "Jurusan yang mempelajari seni desain grafis, ilustrasi, branding, dan media komunikasi visual.",
-        prospekKerja: ["Desainer Grafis", "Creative Director", "Animator", "Illustrator"],
-        prospekKuliah: ["DKV", "Seni Rupa", "Multimedia", "Periklanan"],
+    "Desain Komunikasi Visual (DKV)": {
         icon: "🎨",
-        smartRating: {
-            simple: "Pembelajaran kreatif yang menyenangkan dan mudah dipahami",
-            multi: "Mempertimbangkan berbagai aspek kreativitas dan teknis",
-            attribute: "Fokus pada software mastery, prinsip visual, dan portfolio",
-            rating: "Penilaian berbasis portfolio dan kompetisi desain",
-            technique: "Project-based learning dengan mentorship profesional"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Desain Grafis", "Ilustrasi Digital", "Branding", "Multimedia"],
-            fasilitas: ["Studio Desain", "Komputer Apple", "Tablet Grafis", "Printer Large Format"],
-            keunggulan: ["Portfolio Profesional", "Kerjasama dengan Agency", "Sertifikasi Adobe", "Freelance Ready"],
-            biaya: "Rp 1.800.000 - Rp 2.300.000 per semester"
-        }
+        kompetensiUtama: ["Desain Grafis & Layouting", "Ilustrasi Digital & Vektor", "Branding & Logo Design", "Fotografi & Videografi"],
+        fasilitas: ["Studio Desain Grafis", "Laboratorium Komputer iMac", "Tablet Grafis Wacom", "Kamera DSLR & Mirrorless", "Studio Hijau"],
+        keunggulan: ["Portfolio Siap Kerja", "Sertifikasi Adobe Certified Professional", "Magang di Creative Agency Nasional", "Peluang Freelance Terbuka Lebar"],
+        biaya: "Rp 1.800.000 - Rp 2.300.000 per semester",
+        prospekKuliah: ["S1 DKV", "Seni Rupa Murni", "Broadcasting", "Manajemen Periklanan"]
     },
-    {
-        id: 5,
-        nama: "Tata Kecantikan",
-        deskripsi: "Jurusan yang mempelajari perawatan wajah, rambut, tata rias, serta estetika kecantikan.",
-        prospekKerja: ["Makeup Artist", "Beauty Therapist", "Konsultan Kecantikan", "Hair Stylist"],
-        prospekKuliah: ["Tata Rias", "Kecantikan dan Estetika", "Manajemen Spa", "Manajemen Bisnis"],
+    "Tata Kecantikan": {
         icon: "💄",
-        smartRating: {
-            simple: "Pembelajaran praktis dengan model langsung",
-            multi: "Mempertimbangkan berbagai aspek keterampilan dan kreativitas",
-            attribute: "Fokus pada tata rias, perawatan kulit, dan styling",
-            rating: "Penilaian melalui demonstrasi dan sertifikasi",
-            technique: "Hands-on training dengan praktik langsung"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Tata Rias Wajah", "Perawatan Kulit", "Styling Rambut", "Manajemen Spa"],
-            fasilitas: ["Salon Mini", "Ruang Treatment", "Peralatan Kecantikan", "Model Praktik"],
-            keunggulan: ["Sertifikasi Beauty", "Kerjasama dengan Salon", "Portfolio Karya", "Siap Berwirausaha"],
-            biaya: "Rp 1.400.000 - Rp 1.900.000 per semester"
-        }
+        kompetensiUtama: ["Tata Rias Wajah (MUA)", "Perawatan Kulit (Facial & Body Treatment)", "Styling & Hairdressing", "Manajemen Spa & Salon"],
+        fasilitas: ["Salon Mini Simulasi", "Ruang Treatment Kulit Wajah", "Peralatan Spa & Relaksasi", "Model Rambut Praktik"],
+        keunggulan: ["Sertifikasi Keahlian Beauty", "Kerjasama Brand Kosmetik Ternama", "Portfolio Hasil Karya Tata Rias", "Siap Membuka Bengkel Usaha Salon Mandiri"],
+        biaya: "Rp 1.400.000 - Rp 1.900.000 per semester",
+        prospekKuliah: ["Pendidikan Tata Rias", "Kecantikan dan Estetika", "Manajemen Bisnis Wellness"]
     },
-    {
-        id: 6,
-        nama: "Tata Boga",
-        deskripsi: "Jurusan yang mempelajari seni memasak, manajemen dapur, dan pengolahan makanan modern maupun tradisional.",
-        prospekKerja: ["Chef", "Food Stylist", "Pengusaha Kuliner", "Ahli Gizi"],
-        prospekKuliah: ["Tata Boga", "Pariwisata", "Gizi", "Manajemen Perhotelan"],
+    "Tata Boga": {
         icon: "🍳",
-        smartRating: {
-            simple: "Pembelajaran memasak yang menyenangkan dan praktis",
-            multi: "Mempertimbangkan berbagai aspek teknik dan kreativitas",
-            attribute: "Fokus pada culinary skills, menu development, dan hygiene",
-            rating: "Penilaian melalui praktik dan kompetisi kuliner",
-            technique: "Pembelajaran berbasis praktik di dapur profesional"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Teknik Memasak", "Manajemen Dapur", "Food Styling", "Nutrisi & Gizi"],
-            fasilitas: ["Dapur Profesional", "Alat Masak Modern", "Ruang Penyajian", "Garden Hidroponik"],
-            keunggulan: ["Sertifikasi Chef", "Kerjasama dengan Hotel", "Kompetisi Kuliner", "Siap Berwirausaha"],
-            biaya: "Rp 1.500.000 - Rp 2.000.000 per semester"
-        }
+        kompetensiUtama: ["Teknik Dasar Memasak & Baking", "Manajemen Operasional Dapur", "Food Styling & Garnishing", "Nutrisi & Gizi Makanan"],
+        fasilitas: ["Dapur Standar Hotel Bintang 5", "Peralatan Memasak & Oven Modern", "Restoran Simulasi", "Kebun Hidroponik Bahan Baku"],
+        keunggulan: ["Sertifikasi Kompetensi Chef", "Kerjasama Magang dengan Hotel Berbintang", "Kompetisi Masak Rutin", "Modal Keterampilan Wirausaha Kuliner"],
+        biaya: "Rp 1.500.000 - Rp 2.000.000 per semester",
+        prospekKuliah: ["S1 Tata Boga", "Pariwisata & Perhotelan", "Ilmu Gizi", "Manajemen Kuliner"]
     },
-    {
-        id: 7,
-        nama: "Rekayasa Perangkat Lunak (RPL)",
-        deskripsi: "Jurusan yang mempelajari pengembangan software, aplikasi mobile, hingga sistem informasi.",
-        prospekKerja: ["Software Engineer", "Web Developer", "Mobile Developer", "Game Developer"],
-        prospekKuliah: ["Informatika", "Teknik Komputer", "Sistem Informasi", "Ilmu Komputer"],
+    "Rekayasa Perangkat Lunak (RPL)": {
         icon: "🖥️",
-        smartRating: {
-            simple: "Pembelajaran coding yang terstruktur dan mudah diikuti",
-            multi: "Mempertimbangkan berbagai aspek programming dan problem solving",
-            attribute: "Fokus pada bahasa pemrograman, database, dan software engineering",
-            rating: "Penilaian berbasis project portfolio dan coding test",
-            technique: "Project-based learning dengan real-world applications"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Web Development", "Mobile Development", "Database Management", "Software Engineering"],
-            fasilitas: ["Lab Komputer Modern", "Server Development", "Software Terbaru", "Internet High Speed"],
-            keunggulan: ["Portfolio Digital", "Kerjasama dengan Tech Company", "Sertifikasi IT", "Startup Ready"],
-            biaya: "Rp 1.900.000 - Rp 2.400.000 per semester"
-        }
+        kompetensiUtama: ["Web Development (HTML, CSS, JS, PHP)", "Mobile Development (Android/iOS)", "Database Management (MySQL, SQL Server)", "Object-Oriented Programming"],
+        fasilitas: ["Laboratorium Komputer Modern", "Server Lokal untuk Hosting Mandiri", "Internet Gigabit", "Perangkat IoT Eksperimen"],
+        keunggulan: ["Portfolio Aplikasi Mandiri", "Kerjasama Perusahaan IT & Software House", "Sertifikasi Internasional Oracle/Microsoft", "Kesiapan Membangun Tech Startup"],
+        biaya: "Rp 1.900.000 - Rp 2.400.000 per semester",
+        prospekKuliah: ["S1 Teknik Informatika", "Sistem Informasi", "Teknik Komputer", "Sains Data"]
     },
-    {
-        id: 8,
-        nama: "Teknik Komputer dan Jaringan (TKJ)",
-        deskripsi: "Jurusan yang mempelajari perangkat keras komputer, jaringan, dan sistem keamanan jaringan.",
-        prospekKerja: ["Network Engineer", "IT Support", "System Administrator", "Cyber Security Analyst"],
-        prospekKuliah: ["Teknik Komputer", "Jaringan", "Sistem Informasi", "Informatika"],
+    "Teknik Komputer dan Jaringan (TKJ)": {
         icon: "💻",
-        smartRating: {
-            simple: "Pembelajaran teknis yang sistematis dan terstruktur",
-            multi: "Mempertimbangkan berbagai aspek hardware, networking, dan security",
-            attribute: "Fokus pada troubleshooting, konfigurasi, dan maintenance",
-            rating: "Penilaian melalui praktik laboratorium dan sertifikasi",
-            technique: "Hands-on learning dengan peralatan industri"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Troubleshooting Hardware", "Konfigurasi Jaringan", "Cyber Security", "System Administration"],
-            fasilitas: ["Lab Jaringan Cisco", "Server Room", "Alat Networking", "Security Lab"],
-            keunggulan: ["Sertifikasi Cisco", "Kerjasama dengan IT Company", "Hands-on Experience", "High Demand"],
-            biaya: "Rp 1.800.000 - Rp 2.300.000 per semester"
-        }
+        kompetensiUtama: ["Troubleshooting Hardware & PC", "Konfigurasi Jaringan (Routing & Switching)", "Cyber Security & Firewall", "Sistem Administrasi Server"],
+        fasilitas: ["Lab Jaringan Standar Cisco", "Server Room Khusus", "Perangkat Router & Switch Industri", "Peralatan Fiber Optic"],
+        keunggulan: ["Sertifikasi Cisco (CCNA)", "Kerjasama Penyedia ISP & Jaringan Nasional", "Pengalaman Praktik Konfigurasi Riil", "Kebutuhan IT Administrator Sangat Tinggi"],
+        biaya: "Rp 1.800.000 - Rp 2.300.000 per semester",
+        prospekKuliah: ["S1 Teknik Komputer", "Teknik Telekomunikasi", "Jaringan Informasi", "Keamanan Siber"]
     },
-    {
-        id: 9,
-        nama: "Teknik Kendaraan Ringan (TKR)",
-        deskripsi: "Jurusan yang mempelajari perbaikan, perawatan, dan teknologi kendaraan bermotor roda empat.",
-        prospekKerja: ["Mekanik Mobil", "Teknisi Otomotif", "Service Advisor", "Wirausaha Bengkel"],
-        prospekKuliah: ["Teknik Mesin", "Teknik Otomotif", "Manufaktur", "Rekayasa Transportasi"],
+    "Teknik Kendaraan Ringan (TKR)": {
         icon: "🚗",
-        smartRating: {
-            simple: "Pembelajaran praktis dengan kendaraan nyata",
-            multi: "Mempertimbangkan berbagai aspek pengetahuan mesin dan teknis",
-            attribute: "Fokus pada diagnosis, perbaikan, dan teknologi otomotif",
-            rating: "Penilaian melalui praktik workshop dan sertifikasi",
-            technique: "Pembelajaran hands-on dengan kendaraan modern"
-        },
-        detailInfo: {
-            kompetensiUtama: ["Diagnosis Mesin", "Perbaikan Sistem Otomotif", "Service Kendaraan", "Teknologi Modern"],
-            fasilitas: ["Workshop Otomotif", "Lift Kendaraan", "Alat Diagnosis", "Bengkel Mini"],
-            keunggulan: ["Sertifikasi Mekanik", "Kerjasama dengan Dealer", "Hands-on Experience", "Siap Berwirausaha"],
-            biaya: "Rp 1.600.000 - Rp 2.100.000 per semester"
-        }
+        kompetensiUtama: ["Diagnosis Kerusakan Mesin Mobil", "Servis Sistem Transmisi & Rem", "Kelistrikan & AC Mobil", "Teknologi Kendaraan EFI & Hybrid"],
+        fasilitas: ["Workshop Otomotif Mobil Lengkap", "Car Lift Hidrolik", "Scanner Sensor EFI", "Mesin Trainer & Bongkar Pasang"],
+        keunggulan: ["Sertifikasi Mekanik Kelas Industri", "Kerjasama ATPM Astra & Dealer Resmi", "Keterampilan Servis Standar Bengkel Resmi", "Kebutuhan Mekanik yang Konsisten Tinggi"],
+        biaya: "Rp 1.600.000 - Rp 2.100.000 per semester",
+        prospekKuliah: ["S1 Teknik Mesin", "Teknik Otomotif", "Pendidikan Teknik Vokasi", "Teknik Manufaktur"]
     }
-];
+};
 
+const defaultMeta = {
+    icon: "🎓",
+    kompetensiUtama: ["Kompetensi Keahlian Dasar", "Teori Kejuruan", "Praktik Kerja Industri"],
+    fasilitas: ["Ruang Kelas Nyaman", "Laboratorium Praktik", "Perpustakaan"],
+    keunggulan: ["Lulusan Siap Kerja", "Sertifikasi Sekolah", "Peluang Karir Luas"],
+    biaya: "Rp 1.500.000 per semester",
+    prospekKuliah: ["Melanjutkan ke Universitas", "Politeknik Vokasi"]
+};
 
-
-export function JurusanList() {
+export function JurusanList({ jurusans = [] }: JurusanListProps) {
     const [selectedJurusan, setSelectedJurusan] = useState<number | null>(null);
 
     const handleDetailClick = (id: number) => {
@@ -209,6 +130,22 @@ export function JurusanList() {
         setSelectedJurusan(null);
     };
 
+    const handleDaftarClick = (jurusanId: number) => {
+        const event = new CustomEvent("select-jurusan", { detail: { jurusanId } });
+        window.dispatchEvent(event);
+        handleCloseModal();
+        setTimeout(() => {
+            const pendaftaranSection = document.getElementById("pendaftaran");
+            if (pendaftaranSection) {
+                pendaftaranSection.scrollIntoView({ behavior: "smooth" });
+                const firstInput = document.getElementById("nama_lengkap");
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            }
+        }, 150);
+    };
+
     // Prevent scroll when modal is open
     useEffect(() => {
         if (selectedJurusan) {
@@ -217,7 +154,6 @@ export function JurusanList() {
             document.body.style.overflow = 'unset';
         }
 
-        // Cleanup function
         return () => {
             document.body.style.overflow = 'unset';
         };
@@ -249,280 +185,363 @@ export function JurusanList() {
 
                 {/* Penjelasan SMART */}
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl mt-8 mb-12 border border-white/10 shadow-xl">
-                    <h3 className="text-2xl font-bold mb-6 text-center text-white">Metode SMART (Simple, Multi, Attribute, Rating, Technique)</h3>
+                    <h3 className="text-2xl font-bold mb-6 text-center text-white">Metode SMART (Simple Multi Attribute Rating Technique)</h3>
                     <p className="text-gray-300 text-center mb-8 max-w-4xl mx-auto">
-                        Metode SMART adalah teknik penilaian yang terdiri dari 5 komponen terpisah untuk membantu pemilihan jurusan berdasarkan kriteria yang telah ditentukan dengan sistem rating yang objektif.
+                        Sistem pendukung keputusan kami menggunakan model matematika **SMART** untuk mengukur kecocokan akademis calon siswa terhadap kriteria unggulan tiap jurusan.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                         <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 p-6 rounded-xl border border-blue-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
                                 <span className="bg-blue-500/20 text-blue-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">S</span>
-                                <h4 className="font-bold text-xl text-blue-300">Simple</h4>
+                                <h4 className="font-bold text-lg text-blue-300">Simple</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Proses evaluasi yang sederhana dan mudah dipahami oleh siswa.
+                                Pembobotan kriteria yang sederhana, transparan, dan mudah dipahami oleh calon siswa.
                             </p>
                         </div>
-                        <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 p-6 rounded-xl border border-emerald-500/20 shadow-lg">
+                        <div className="bg-gradient-to-br from-[#10B981]/10 to-emerald-800/20 p-6 rounded-xl border border-emerald-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-blue-500/20 text-blue-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">M</span>
-                                <h4 className="font-bold text-xl text-blue-300">Multi</h4>
+                                <span className="bg-emerald-500/20 text-emerald-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">M</span>
+                                <h4 className="font-bold text-lg text-emerald-300">Multi-Attribute</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Mempertimbangkan berbagai aspek dan perspektif dalam penilaian.
+                                Evaluasi pendaftaran menggunakan multi-kriteria nilai mata pelajaran utama.
                             </p>
                         </div>
-                        <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 p-6 rounded-xl border border-violet-500/20 shadow-lg">
+                        <div className="bg-gradient-to-br from-violet-900/40 to-violet-800/20 p-6 rounded-xl border border-violet-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-blue-500/20 text-blue-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">A</span>
-                                <h4 className="font-bold text-xl text-blue-300">Attribute</h4>
+                                <span className="bg-violet-500/20 text-violet-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">A</span>
+                                <h4 className="font-bold text-lg text-violet-300">Attribute Weight</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Fokus pada atribut-atribut spesifik seperti minat, bakat, nilai, dan prospek karir.
+                                Penentuan bobot prioritas kriteria yang disesuaikan secara adil untuk tiap jurusan.
                             </p>
                         </div>
-                        <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 p-6 rounded-xl border border-amber-500/20 shadow-lg">
+                        <div className="bg-gradient-to-br from-amber-900/40 to-amber-800/20 p-6 rounded-xl border border-amber-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-blue-500/20 text-blue-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">R</span>
-                                <h4 className="font-bold text-xl text-blue-300">Rating</h4>
+                                <span className="bg-amber-500/20 text-amber-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">R</span>
+                                <h4 className="font-bold text-lg text-amber-300">Rating Utility</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Sistem rating numerik untuk setiap kriteria yang dinilai.
+                                Menstandarisasi nilai rapor Anda menjadi nilai utilitas (skala 0 s.d 100) berdasarkan KKM.
                             </p>
                         </div>
-                        <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 p-6 rounded-xl border border-rose-500/20 shadow-lg">
+                        <div className="bg-gradient-to-br from-rose-900/40 to-rose-800/20 p-6 rounded-xl border border-rose-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-blue-500/20 text-blue-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">T</span>
-                                <h4 className="font-bold text-xl text-blue-300">Technique</h4>
+                                <span className="bg-rose-500/20 text-rose-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">T</span>
+                                <h4 className="font-bold text-lg text-rose-300">Technique</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Teknik yang telah terbukti efektif untuk pengambilan keputusan.
+                                Teknik perangkingan objektif untuk memeringkat calon siswa secara ilmiah.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {/* Grid Cards Normal */}
+                {/* Grid Cards Dinamis */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {jurusanData.map((jurusan) => (
-                        <Card key={jurusan.id} className="overflow-hidden bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 group">
-                            <CardHeader className="pb-2 border-b border-blue-500/20">
-                                <div className="flex items-center gap-4">
-                                    <div className="text-4xl p-3 bg-blue-500/20 rounded-xl">{jurusan.icon}</div>
-                                    <CardTitle className="text-white">{jurusan.nama}</CardTitle>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="pt-4">
-                                <CardDescription className="text-gray-400 mb-4">
-                                    {jurusan.deskripsi}
-                                </CardDescription>
+                    {jurusans.map((jurusan) => {
+                        const meta = jurusanMeta[jurusan.nama_jurusan] || defaultMeta;
+                        const prospekKerja = jurusan.prospek_karir 
+                            ? jurusan.prospek_karir.split(',').map(s => s.trim()) 
+                            : [];
 
-                                {/* Rating SMART yang dinamis per jurusan */}
-                                <div className="space-y-3 mb-6">
-                                    <div className="bg-blue-900/30 p-3 rounded-lg border border-blue-500/20">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="bg-blue-500/30 text-blue-300 w-5 h-5 rounded flex items-center justify-center text-xs font-bold">S</span>
-                                            <h4 className="text-xs font-bold text-blue-300">SIMPLE</h4>
+                        return (
+                            <Card key={jurusan.id} className="overflow-hidden bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 group flex flex-col justify-between">
+                                <div>
+                                    <CardHeader className="pb-2 border-b border-blue-500/20">
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-4xl p-3 bg-blue-500/20 rounded-xl">{meta.icon}</div>
+                                            <div>
+                                                <CardTitle className="text-white text-xl">{jurusan.nama_jurusan}</CardTitle>
+                                                <div className="flex items-center gap-1.5 mt-1 text-xs text-amber-300">
+                                                    <span>⭐</span>
+                                                    <span>{jurusan.rating_rekomendasi || '4.5'} Rating Sekolah</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p className="text-xs text-blue-200/80">
-                                            {jurusan.smartRating.simple}
-                                        </p>
-                                    </div>
-                                    <div className="bg-emerald-900/30 p-3 rounded-lg border border-emerald-500/20">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="bg-emerald-500/30 text-emerald-300 w-5 h-5 rounded flex items-center justify-center text-xs font-bold">M</span>
-                                            <h4 className="text-xs font-bold text-emerald-300">MULTI</h4>
-                                        </div>
-                                        <p className="text-xs text-emerald-200/80">
-                                            {jurusan.smartRating.multi}
-                                        </p>
-                                    </div>
-                                    <div className="bg-violet-900/30 p-3 rounded-lg border border-violet-500/20">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="bg-violet-500/30 text-violet-300 w-5 h-5 rounded flex items-center justify-center text-xs font-bold">A</span>
-                                            <h4 className="text-xs font-bold text-violet-300">ATTRIBUTE</h4>
-                                        </div>
-                                        <p className="text-xs text-violet-200/80">
-                                            {jurusan.smartRating.attribute}
-                                        </p>
-                                    </div>
-                                    <div className="bg-amber-900/30 p-3 rounded-lg border border-amber-500/20">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="bg-amber-500/30 text-amber-300 w-5 h-5 rounded flex items-center justify-center text-xs font-bold">R</span>
-                                            <h4 className="text-xs font-bold text-amber-300">RATING</h4>
-                                        </div>
-                                        <p className="text-xs text-amber-200/80">
-                                            {jurusan.smartRating.rating}
-                                        </p>
-                                    </div>
-                                    <div className="bg-rose-900/30 p-3 rounded-lg border border-rose-500/20">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="bg-rose-500/30 text-rose-300 w-5 h-5 rounded flex items-center justify-center text-xs font-bold">T</span>
-                                            <h4 className="text-xs font-bold text-rose-300">TECHNIQUE</h4>
-                                        </div>
-                                        <p className="text-xs text-rose-200/80">
-                                            {jurusan.smartRating.technique}
-                                        </p>
-                                    </div>
-                                </div>
+                                    </CardHeader>
+                                    <CardContent className="pt-4">
+                                        <CardDescription className="text-gray-300 mb-4 line-clamp-3">
+                                            {jurusan.deskripsi}
+                                        </CardDescription>
 
-                                {/* Prospek Kerja */}
-                                <div className="space-y-2 mb-4">
-                                    <h4 className="text-sm font-medium text-gray-300">Prospek Kerja:</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {jurusan.prospekKerja.map((prospek, index) => (
-                                            <Badge key={index} variant="secondary" className="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30">
-                                                {prospek}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                </div>
+                                        {/* Tampilan Bobot SMART */}
+                                        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3 mb-6">
+                                            <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider pb-2 border-b border-slate-800">
+                                                <span>Kriteria Evaluasi SMART</span>
+                                                <span className="text-amber-400">Bobot Penilaian</span>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2 text-xs">
+                                                <div className="flex justify-between items-center bg-slate-950/40 p-2 rounded border border-slate-800/40">
+                                                    <span className="text-slate-400 font-medium">📐 MTK</span>
+                                                    <span className="font-bold text-blue-400">{jurusan.bobot_matematika}%</span>
+                                                </div>
+                                                <div className="flex justify-between items-center bg-slate-950/40 p-2 rounded border border-slate-800/40">
+                                                    <span className="text-slate-400 font-medium">🔬 IPA</span>
+                                                    <span className="font-bold text-emerald-400">{jurusan.bobot_ipa}%</span>
+                                                </div>
+                                                <div className="flex justify-between items-center bg-slate-950/40 p-2 rounded border border-slate-800/40">
+                                                    <span className="text-slate-400 font-medium">💬 BHS</span>
+                                                    <span className="font-bold text-violet-400">{jurusan.bobot_bahasa}%</span>
+                                                </div>
+                                                <div className="flex justify-between items-center bg-slate-950/40 p-2 rounded border border-slate-800/40">
+                                                    <span className="text-slate-400 font-medium">🌍 IPS</span>
+                                                    <span className="font-bold text-rose-400">{jurusan.bobot_ips}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                {/* Prospek Kuliah */}
-                                <div className="space-y-2">
-                                    <h4 className="text-sm font-medium text-gray-300">Prospek Kuliah:</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {jurusan.prospekKuliah.map((prospek, index) => (
-                                            <Badge key={index} variant="secondary" className="bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30">
-                                                {prospek}
-                                            </Badge>
-                                        ))}
-                                    </div>
+                                        {/* Prospek Kerja */}
+                                        {prospekKerja.length > 0 && (
+                                            <div className="space-y-2 mb-4">
+                                                <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Prospek Karir:</h4>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {prospekKerja.slice(0, 3).map((prospek, index) => (
+                                                        <Badge key={index} variant="secondary" className="bg-blue-500/10 text-blue-300 border border-blue-500/20 text-xs">
+                                                            {prospek}
+                                                        </Badge>
+                                                    ))}
+                                                    {prospekKerja.length > 3 && (
+                                                        <Badge variant="secondary" className="bg-slate-800 text-slate-400 text-xs">
+                                                            +{prospekKerja.length - 3} lainnya
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </CardContent>
                                 </div>
-                            </CardContent>
-                            <CardFooter className="border-t border-white/5 pt-4">
-                                <Button 
-                                    variant="outline" 
-                                    className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/20 hover:text-white group-hover:border-blue-400/50"
-                                    onClick={() => handleDetailClick(jurusan.id)}
-                                >
-                                    Lihat Detail
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    ))}
+                                <CardFooter className="border-t border-white/5 pt-4 mt-auto">
+                                    <Button 
+                                        variant="outline" 
+                                        className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/20 hover:text-white group-hover:border-blue-400/50 cursor-pointer"
+                                        onClick={() => handleDetailClick(jurusan.id)}
+                                    >
+                                        Lihat Detail Kejuruan
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        );
+                    })}
                 </div>
 
-                {/* Modal Overlay */}
+                {/* Modal Overlay Detail Jurusan */}
                 {selectedJurusan && (
-                    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div 
+                        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6 transition-all duration-300 animate-in fade-in"
+                        onClick={handleCloseModal}
+                    >
+                        <style dangerouslySetInnerHTML={{__html: `
+                            .custom-modal-scrollbar::-webkit-scrollbar {
+                                width: 6px;
+                            }
+                            .custom-modal-scrollbar::-webkit-scrollbar-track {
+                                background: transparent;
+                            }
+                            .custom-modal-scrollbar::-webkit-scrollbar-thumb {
+                                background: #334155;
+                                border-radius: 9999px;
+                            }
+                            .custom-modal-scrollbar::-webkit-scrollbar-thumb:hover {
+                                background: #475569;
+                            }
+                        `}} />
+
                         <div 
-                            className="bg-gradient-to-b from-[#334155] to-[#1E293B] w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 shadow-2xl"
+                            className="bg-slate-900 border border-slate-800 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 scale-95 md:scale-100 animate-in zoom-in-95"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {(() => {
-                                const jurusan = jurusanData.find(j => j.id === selectedJurusan);
+                                const jurusan = jurusans.find(j => j.id === selectedJurusan);
                                 if (!jurusan) return null;
+                                const meta = jurusanMeta[jurusan.nama_jurusan] || defaultMeta;
+                                const prospekKerja = jurusan.prospek_karir 
+                                    ? jurusan.prospek_karir.split(',').map(s => s.trim()) 
+                                    : [];
 
                                 return (
-                                    <div className="p-8">
-                                        {/* Header */}
-                                        <div className="flex items-center justify-between mb-8 pb-6 border-b border-blue-500/20">
-                                            <div className="flex items-center gap-6">
-                                                <div className="text-6xl p-4 bg-blue-500/20 rounded-2xl">{jurusan.icon}</div>
-                                                <div>
-                                                    <h2 className="text-3xl font-bold text-white mb-2">{jurusan.nama}</h2>
-                                                    <p className="text-gray-400 text-lg max-w-2xl">
-                                                        {jurusan.deskripsi}
-                                                    </p>
+                                    <>
+                                        {/* Header - Sticky di bagian atas */}
+                                        <div className="relative p-5 md:p-6 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-indigo-950/30 to-slate-900 shrink-0">
+                                            {/* Decorative Background Glow */}
+                                            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+                                            
+                                            <div className="flex items-center gap-4 md:gap-5 justify-between relative z-10">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="text-4xl md:text-5xl p-2.5 bg-blue-500/10 rounded-xl border border-blue-500/20 shadow-inner flex items-center justify-center shrink-0">
+                                                        {meta.icon}
+                                                    </div>
+                                                    <div>
+                                                        <h2 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight">{jurusan.nama_jurusan}</h2>
+                                                        <div className="flex items-center gap-1.5 mt-1 text-xs text-amber-400 font-medium">
+                                                            <span>⭐</span>
+                                                            <span>{jurusan.rating_rekomendasi || '4.5'} Rating Sekolah</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                                
+                                                <button 
+                                                    onClick={handleCloseModal}
+                                                    className="bg-slate-950/50 hover:bg-rose-500/20 border border-slate-800 hover:border-rose-500/30 text-slate-400 hover:text-rose-400 p-2 rounded-lg cursor-pointer transition-all duration-200"
+                                                    aria-label="Tutup"
+                                                >
+                                                    <X className="w-5 h-5" />
+                                                </button>
                                             </div>
-                                            <Button 
-                                                variant="outline" 
-                                                size="sm"
-                                                onClick={handleCloseModal}
-                                                className="border-red-500/30 text-red-400 hover:bg-red-500/20 hover:text-white hover:border-red-400/50"
-                                            >
-                                                <X className="w-4 h-4 mr-2" />
-                                                Tutup
-                                            </Button>
                                         </div>
 
-                                        {/* Content */}
-                                        <div className="space-y-6">
-                                            {/* Kompetensi Utama */}
-                                            <div className="bg-gradient-to-r from-blue-900/30 to-indigo-900/30 p-6 rounded-xl border border-blue-500/20">
-                                                <h4 className="text-xl font-semibold text-blue-300 mb-4 flex items-center gap-3">
-                                                    <span className="bg-blue-500/30 text-blue-300 w-8 h-8 rounded-lg flex items-center justify-center text-lg font-bold">K</span>
-                                                    Kompetensi Utama
-                                                </h4>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    {jurusan.detailInfo.kompetensiUtama.map((kompetensi, index) => (
-                                                        <div key={index} className="flex items-center gap-3">
-                                                            <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
-                                                            <span className="text-gray-300">{kompetensi}</span>
+                                        {/* Content - Scrollable di bagian tengah */}
+                                        <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 custom-modal-scrollbar">
+                                            {/* Deskripsi */}
+                                            <div className="space-y-2">
+                                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Deskripsi Program Keahlian</h4>
+                                                <p className="text-slate-200 leading-relaxed text-sm md:text-base">
+                                                    {jurusan.deskripsi}
+                                                </p>
+                                            </div>
+
+                                            {/* SMART Weights */}
+                                            <div className="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/80">
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <Award className="w-5 h-5 text-amber-400" />
+                                                    <h4 className="text-xs font-bold text-slate-300 tracking-wider uppercase">Sistem Penilaian & Bobot Kriteria SMART</h4>
+                                                </div>
+                                                <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                                                    PPDB SMK memakai metode SMART untuk menilai rapor Anda. Setiap mata pelajaran memiliki bobot pengaruh berbeda untuk kelayakan pendaftaran jurusan ini:
+                                                </p>
+                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    {[
+                                                        { label: "C1: Matematika", weight: jurusan.bobot_matematika, color: "from-blue-500 to-indigo-600", text: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20" },
+                                                        { label: "C2: IPA", weight: jurusan.bobot_ipa, color: "from-emerald-500 to-teal-600", text: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+                                                        { label: "C3: Bahasa", weight: jurusan.bobot_bahasa, color: "from-violet-500 to-purple-600", text: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20" },
+                                                        { label: "C4: IPS", weight: jurusan.bobot_ips, color: "from-rose-500 to-pink-600", text: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20" }
+                                                    ].map((c, i) => (
+                                                        <div key={i} className={`bg-slate-900/80 p-4 rounded-xl border ${c.border} flex flex-col justify-between shadow-sm`}>
+                                                            <div>
+                                                                <div className="flex justify-between items-center mb-1">
+                                                                    <span className={`text-[10px] font-bold ${c.text} uppercase tracking-wider`}>{c.label}</span>
+                                                                    <span className="text-[9px] text-slate-500">Bobot</span>
+                                                                </div>
+                                                                <p className="text-2xl font-black text-white">{c.weight}%</p>
+                                                            </div>
+                                                            <div className="w-full bg-slate-950 h-1.5 rounded-full mt-3 overflow-hidden">
+                                                                <div className={`bg-gradient-to-r ${c.color} h-full rounded-full`} style={{ width: `${c.weight}%` }} />
+                                                            </div>
                                                         </div>
                                                     ))}
                                                 </div>
                                             </div>
 
-                                            {/* Fasilitas */}
-                                            <div className="bg-gradient-to-r from-emerald-900/30 to-teal-900/30 p-6 rounded-xl border border-emerald-500/20">
-                                                <h4 className="text-xl font-semibold text-emerald-300 mb-4 flex items-center gap-3">
-                                                    <span className="bg-emerald-500/30 text-emerald-300 w-8 h-8 rounded-lg flex items-center justify-center text-lg font-bold">F</span>
-                                                    Fasilitas Unggulan
-                                                </h4>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    {jurusan.detailInfo.fasilitas.map((fasilitas, index) => (
-                                                        <div key={index} className="flex items-center gap-3">
-                                                            <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
-                                                            <span className="text-gray-300">{fasilitas}</span>
+                                            {/* Baris Informasi Vokasi */}
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                {[
+                                                    { icon: <Target className="w-5 h-5 text-blue-400" />, label: "Kuota Maksimal", value: `${jurusan.kuota_maksimal || '36'} Siswa`, bg: "bg-blue-500/5", border: "border-blue-500/10" },
+                                                    { icon: <Layers className="w-5 h-5 text-emerald-400" />, label: "Durasi Pendidikan", value: `${(jurusan.durasi_program / 12) || 3} Tahun`, bg: "bg-emerald-500/5", border: "border-emerald-500/10" },
+                                                    { icon: <BookOpen className="w-5 h-5 text-violet-400" />, label: "Tingkat Kelulusan", value: `${jurusan.tingkat_kelulusan || '100'}% Alumnus`, bg: "bg-violet-500/5", border: "border-violet-500/10" }
+                                                ].map((item, idx) => (
+                                                    <div key={idx} className={`bg-slate-900/60 p-4 rounded-xl border ${item.border} flex items-center gap-4`}>
+                                                        <div className={`p-2.5 rounded-lg ${item.bg} border ${item.border}`}>
+                                                            {item.icon}
                                                         </div>
-                                                    ))}
-                                                </div>
+                                                        <div>
+                                                            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{item.label}</p>
+                                                            <p className="text-sm font-bold text-white mt-0.5">{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
 
-                                            {/* Keunggulan */}
-                                            <div className="bg-gradient-to-r from-purple-900/30 to-violet-900/30 p-6 rounded-xl border border-purple-500/20">
-                                                <h4 className="text-xl font-semibold text-purple-300 mb-4 flex items-center gap-3">
-                                                    <span className="bg-purple-500/30 text-purple-300 w-8 h-8 rounded-lg flex items-center justify-center text-lg font-bold">U</span>
-                                                    Keunggulan Program
-                                                </h4>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    {jurusan.detailInfo.keunggulan.map((keunggulan, index) => (
-                                                        <div key={index} className="flex items-center gap-3">
-                                                            <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
-                                                            <span className="text-gray-300">{keunggulan}</span>
-                                                        </div>
-                                                    ))}
+                                            {/* Detail Kompetensi & Fasilitas */}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="bg-slate-900/40 p-5 rounded-xl border border-slate-800/80">
+                                                    <h5 className="text-xs font-bold text-blue-400 mb-4 uppercase tracking-wider flex items-center gap-2">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                                                        Materi & Kompetensi Utama
+                                                    </h5>
+                                                    <ul className="space-y-2.5">
+                                                        {meta.kompetensiUtama.map((kompetensi, index) => (
+                                                            <li key={index} className="flex gap-2.5 items-start text-xs text-slate-200 leading-normal">
+                                                                <span className="text-blue-500 font-bold">•</span>
+                                                                <span>{kompetensi}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
-                                            </div>
 
-                                            {/* Biaya */}
-                                            <div className="bg-gradient-to-r from-amber-900/30 to-orange-900/30 p-6 rounded-xl border border-amber-500/20">
-                                                <h4 className="text-xl font-semibold text-amber-300 mb-4 flex items-center gap-3">
-                                                    <span className="bg-amber-500/30 text-amber-300 w-8 h-8 rounded-lg flex items-center justify-center text-lg font-bold">B</span>
-                                                    Biaya Pendidikan
-                                                </h4>
-                                                <p className="text-2xl font-bold text-amber-200 mb-2">{jurusan.detailInfo.biaya}</p>
-                                                <p className="text-gray-400">*Biaya dapat berubah sesuai kebijakan sekolah</p>
+                                                <div className="bg-slate-900/40 p-5 rounded-xl border border-slate-800/80">
+                                                    <h5 className="text-xs font-bold text-emerald-400 mb-4 uppercase tracking-wider flex items-center gap-2">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                                        Fasilitas & Lab Unggulan
+                                                    </h5>
+                                                    <ul className="space-y-2.5">
+                                                        {meta.fasilitas.map((fasilitas, index) => (
+                                                            <li key={index} className="flex gap-2.5 items-start text-xs text-slate-200 leading-normal">
+                                                                <span className="text-emerald-500 font-bold">•</span>
+                                                                <span>{fasilitas}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
                                             </div>
 
                                             {/* Prospek Kerja & Kuliah */}
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                <div className="bg-blue-900/20 p-6 rounded-xl border border-blue-500/20">
-                                                    <h4 className="text-lg font-semibold text-blue-300 mb-4">Prospek Kerja</h4>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {jurusan.prospekKerja.map((prospek, index) => (
-                                                            <Badge key={index} variant="secondary" className="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30">
+                                                <div className="bg-slate-900/40 p-5 rounded-xl border border-slate-800/80">
+                                                    <h5 className="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">Prospek Karir Alumnus</h5>
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {prospekKerja.map((prospek, index) => (
+                                                            <Badge key={index} variant="secondary" className="bg-slate-950 text-slate-300 border border-slate-800 text-[10px] py-1 px-2.5 rounded-md">
                                                                 {prospek}
                                                             </Badge>
                                                         ))}
                                                     </div>
                                                 </div>
-                                                <div className="bg-emerald-900/20 p-6 rounded-xl border border-emerald-500/20">
-                                                    <h4 className="text-lg font-semibold text-emerald-300 mb-4">Prospek Kuliah</h4>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {jurusan.prospekKuliah.map((prospek, index) => (
-                                                            <Badge key={index} variant="secondary" className="bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30">
+                                                <div className="bg-slate-900/40 p-5 rounded-xl border border-slate-800/80">
+                                                    <h5 className="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">Rencana Studi Lanjut (Kuliah)</h5>
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {meta.prospekKuliah.map((prospek, index) => (
+                                                            <Badge key={index} variant="secondary" className="bg-slate-950 text-slate-300 border border-slate-800 text-[10px] py-1 px-2.5 rounded-md">
                                                                 {prospek}
                                                             </Badge>
                                                         ))}
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {/* Biaya & Persyaratan */}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="p-4 rounded-xl bg-slate-900/30 border border-slate-800/50">
+                                                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Persyaratan Masuk Fisik/Administrasi</span>
+                                                    <p className="text-xs text-slate-200 leading-relaxed">{jurusan.persyaratan_masuk || 'Tidak ada persyaratan khusus.'}</p>
+                                                </div>
+                                                <div className="p-4 rounded-xl bg-slate-900/30 border border-slate-800/50 flex flex-col justify-between">
+                                                    <div>
+                                                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Estimasi Biaya Pendidikan</span>
+                                                        <p className="text-base font-bold text-amber-400">{meta.biaya}</p>
+                                                    </div>
+                                                    <p className="text-[9px] text-slate-500 mt-2">*Biaya bersifat estimasi mengikuti kebijakan SPP sekolah.</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        {/* Footer - Sticky di bagian bawah */}
+                                        <div className="p-5 md:p-6 border-t border-slate-800 bg-slate-950/60 flex flex-col sm:flex-row gap-3 justify-end items-center mt-auto shrink-0 animate-in slide-in-from-bottom-5 duration-200">
+                                            <Button 
+                                                variant="outline"
+                                                onClick={handleCloseModal}
+                                                className="w-full sm:w-auto border-slate-800 hover:bg-slate-800 hover:text-white text-slate-350 cursor-pointer rounded-xl px-5 text-xs h-9"
+                                            >
+                                                Kembali
+                                            </Button>
+                                            <Button 
+                                                onClick={() => handleDaftarClick(jurusan.id)}
+                                                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl px-6 text-xs h-9 shadow-md shadow-indigo-500/10 hover:shadow-indigo-500/20 transition-all duration-200 cursor-pointer"
+                                            >
+                                                Daftar Jurusan Ini Sekarang
+                                            </Button>
+                                        </div>
+                                    </>
                                 );
                             })()}
                         </div>

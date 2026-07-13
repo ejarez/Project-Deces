@@ -45,6 +45,40 @@ class JurusanResource extends Resource
                             ->step(0.1),
                     ])->columns(2),
 
+                Forms\Components\Section::make('Bobot Kriteria Metode SMART (%)')
+                    ->description('Tentukan bobot kriteria untuk penilaian kecocokan siswa di jurusan ini (Total bobot disarankan 100%)')
+                    ->schema([
+                        Forms\Components\TextInput::make('bobot_matematika')
+                            ->label('Bobot Matematika')
+                            ->numeric()
+                            ->required()
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->suffix('%'),
+                        Forms\Components\TextInput::make('bobot_ipa')
+                            ->label('Bobot IPA')
+                            ->numeric()
+                            ->required()
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->suffix('%'),
+                        Forms\Components\TextInput::make('bobot_bahasa')
+                            ->label('Bobot Bahasa')
+                            ->numeric()
+                            ->required()
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->suffix('%'),
+                        Forms\Components\TextInput::make('bobot_ips')
+                            ->label('Bobot IPS')
+                            ->numeric()
+                            ->required()
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->suffix('%'),
+                    ])->columns(4),
+
+
                 Forms\Components\Section::make('SMART - Specific & Measurable')
                     ->schema([
                         Forms\Components\TextInput::make('target_siswa_semester')

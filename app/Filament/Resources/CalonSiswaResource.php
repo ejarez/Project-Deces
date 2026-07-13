@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CalonSiswaResource\Pages;
 use App\Filament\Resources\CalonSiswaResource\RelationManagers;
 use App\Models\CalonSiswa;
+use App\Models\Pendaftaran;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -68,28 +69,23 @@ class CalonSiswaResource extends Resource
                         Forms\Components\FileUpload::make('berkas_pendaftaran')
                             ->directory('berkas-pendaftaran')
                             ->acceptedFileTypes(['application/pdf']),
-                        Forms\Components\Select::make('status_pendaftaran')
-                            ->options([
-                                'Menunggu' => 'Menunggu',
-                                'Diproses' => 'Diproses',
-                                'Diterima' => 'Diterima',
-                                'Ditolak' => 'Ditolak',
-                            ])
-                            ->required(),
-                    ])->columns(2),
+                        Forms\Components\Placeholder::make('status_pendaftaran')
+                            ->label('Status Pendaftaran')
+                            ->content(fn ($record) => $record?->status_pendaftaran ?? 'Menunggu'),
+                    ])->columns(3),
 
-                Forms\Components\Section::make('SMART - Specific')
-                    ->description('Tujuan spesifik pendaftaran')
+                Forms\Components\Section::make('Rencana Karir & Cita-Cita')
+                    ->description('Target karir spesifik calon siswa setelah lulus')
                     ->schema([
                         Forms\Components\Textarea::make('specific_goal')
-                            ->label('Tujuan Spesifik')
-                            ->placeholder('Apa tujuan pendidikan dan karir spesifik yang ingin dicapai?')
+                            ->label('Cita-Cita / Target Karir')
+                            ->placeholder('Apa target pendidikan dan karir spesifik yang ingin dicapai?')
                             ->helperText('Contoh: Menjadi programmer di perusahaan teknologi dalam 5 tahun')
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('SMART - Measurable')
-                    ->description('Nilai dan kemampuan terukur')
+                Forms\Components\Section::make('Nilai Akademis (Kriteria SMART)')
+                    ->description('Nilai rapor mata pelajaran utama untuk seleksi keputusan SMART')
                     ->schema([
                         Forms\Components\TextInput::make('measurable_nilai_matematika')
                             ->label('Nilai Matematika')
@@ -113,35 +109,35 @@ class CalonSiswaResource extends Resource
                             ->maxValue(100),
                     ])->columns(2),
 
-                Forms\Components\Section::make('SMART - Achievable')
-                    ->description('Kemampuan dan minat')
+                Forms\Components\Section::make('Keterampilan & Minat')
+                    ->description('Potensi non-akademis pendukung kejuruan')
                     ->schema([
                         Forms\Components\Textarea::make('achievable_kemampuan')
-                            ->label('Kemampuan yang Dimiliki')
+                            ->label('Keterampilan / Bakat Non-Akademis')
                             ->placeholder('Sebutkan kemampuan atau keterampilan yang dimiliki')
                             ->columnSpanFull(),
                         Forms\Components\Textarea::make('achievable_minat')
-                            ->label('Minat dan Hobi')
+                            ->label('Hobi & Bidang Minat')
                             ->placeholder('Sebutkan minat dan hobi yang dimiliki')
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('SMART - Relevant')
-                    ->description('Kesesuaian dengan minat, bakat, dan tujuan')
+                Forms\Components\Section::make('Relevansi & Motivasi')
+                    ->description('Kesesuaian dengan minat dan motivasi masuk jurusan')
                     ->schema([
                         Forms\Components\Textarea::make('relevant_alasan')
-                            ->label('Alasan Relevansi')
-                            ->placeholder('Jelaskan mengapa jurusan ini relevan dengan minat, bakat, dan tujuan karir')
+                            ->label('Alasan Memilih Jurusan')
+                            ->placeholder('Jelaskan mengapa jurusan ini penting untuk masa depan Anda')
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('SMART - Time-bound')
-                    ->description('Rencana waktu')
+                Forms\Components\Section::make('Rencana Studi & Kelulusan')
+                    ->description('Komitmen waktu belajar dan kelulusan')
                     ->schema([
                         Forms\Components\DatePicker::make('timebound_target_lulus')
-                            ->label('Target Waktu Lulus'),
+                            ->label('Tanggal Lulus SMP/MTs'),
                         Forms\Components\Textarea::make('timebound_rencana_studi')
-                            ->label('Rencana Studi')
+                            ->label('Rencana Studi Pasca-Masuk')
                             ->placeholder('Jelaskan rencana studi dan target waktu pencapaian')
                             ->helperText('Contoh: Tahun 1: menguasai dasar-dasar, Tahun 2: spesialisasi, dst.')
                             ->columnSpanFull(),
@@ -153,15 +149,40 @@ class CalonSiswaResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('ranking')
+                    ->label('Rank')
+                    ->state(function (CalonSiswa $record): string {
+                        $jurusanId = $record->jurusan_id;
+                        if (!$jurusanId) return '-';
+
+                        $rank = Pendaftaran::join('calon_siswas', 'pendaftarans.calon_siswa_id', '=', 'calon_siswas.id')
+                            ->where('calon_siswas.jurusan_id', $jurusanId)
+                            ->where('pendaftarans.skor_kesesuaian', '>', $record->pendaftaran?->skor_kesesuaian ?? 0)
+                            ->count() + 1;
+
+                        $total = CalonSiswa::where('jurusan_id', $jurusanId)->count();
+
+                        return "#{$rank} dari {$total}";
+                    })
+                    ->weight('bold')
+                    ->color('warning'),
                 Tables\Columns\TextColumn::make('nama_lengkap')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('jurusan.nama_jurusan')
+                    ->label('Jurusan Pilihan')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nomor_telepon')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('pendaftaran.skor_kesesuaian')
+                    ->label('Skor SMART')
+                    ->numeric()
+                    ->sortable()
+                    ->fontFamily('mono')
+                    ->weight('bold')
+                    ->color(fn (mixed $state): string => match (true) {
+                        (float)$state >= 80 => 'success',
+                        (float)$state >= 70 => 'warning',
+                        default => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('status_pendaftaran')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -170,6 +191,12 @@ class CalonSiswaResource extends Resource
                         'Diterima' => 'success',
                         'Ditolak' => 'danger',
                     }),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('nomor_telepon')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('semester_pendaftaran')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -177,6 +204,7 @@ class CalonSiswaResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('pendaftaran.skor_kesesuaian', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('status_pendaftaran')
                     ->options([
@@ -196,8 +224,10 @@ class CalonSiswaResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

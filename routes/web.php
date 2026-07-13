@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/', [\App\Http\Controllers\PendaftaranController::class, 'index'])->name('home');
+Route::post('/daftar', [\App\Http\Controllers\PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
 // Aliaskan /login ke login Filament agar menjadi default aplikasi
 Route::get('/login', function () {
@@ -22,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

@@ -53,7 +53,7 @@ class PendaftaranResource extends Resource
                             ->required(),
                     ])->columns(2),
 
-                Forms\Components\Section::make('SMART - Specific & Time-bound')
+                Forms\Components\Section::make('Target Waktu Pemrosesan & Tindak Lanjut')
                     ->schema([
                         Forms\Components\TextInput::make('target_waktu_proses')
                             ->label('Target Waktu Proses (hari)')
@@ -72,13 +72,13 @@ class PendaftaranResource extends Resource
                             ->columnSpanFull(),
                     ])->columns(3),
 
-                Forms\Components\Section::make('SMART - Measurable & Achievable')
+                Forms\Components\Section::make('Hasil Evaluasi SMART & Wawancara')
                     ->schema([
                         Forms\Components\TextInput::make('skor_kesesuaian')
-                            ->label('Skor Kesesuaian (1-100)')
-                            ->helperText('Skor kesesuaian calon siswa dengan jurusan yang dipilih')
+                            ->label('Skor Kesesuaian SMART')
+                            ->helperText('Skor kesesuaian hasil evaluasi SMART (0-100)')
                             ->numeric()
-                            ->minValue(1)
+                            ->minValue(0)
                             ->maxValue(100),
                         Forms\Components\TextInput::make('peluang_keberhasilan')
                             ->label('Peluang Keberhasilan (%)')
@@ -100,7 +100,7 @@ class PendaftaranResource extends Resource
                             ->default('Belum Wawancara'),
                     ])->columns(3),
 
-                Forms\Components\Section::make('SMART - Relevant')
+                Forms\Components\Section::make('Rekomendasi Alternatif & Catatan')
                     ->schema([
                         Forms\Components\Select::make('rekomendasi_jurusan_alt')
                             ->label('Rekomendasi Jurusan Alternatif')
@@ -118,6 +118,25 @@ class PendaftaranResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('ranking')
+                    ->label('Rank')
+                    ->state(function (Pendaftaran $record): string {
+                        $jurusanId = $record->calonSiswa?->jurusan_id;
+                        if (!$jurusanId) return '-';
+
+                        $rank = Pendaftaran::join('calon_siswas', 'pendaftarans.calon_siswa_id', '=', 'calon_siswas.id')
+                            ->where('calon_siswas.jurusan_id', $jurusanId)
+                            ->where('pendaftarans.skor_kesesuaian', '>', $record->skor_kesesuaian)
+                            ->count() + 1;
+
+                        $total = Pendaftaran::join('calon_siswas', 'pendaftarans.calon_siswa_id', '=', 'calon_siswas.id')
+                            ->where('calon_siswas.jurusan_id', $jurusanId)
+                            ->count();
+
+                        return "#{$rank} dari {$total}";
+                    })
+                    ->weight('bold')
+                    ->color('warning'),
                 Tables\Columns\TextColumn::make('calonSiswa.nama_lengkap')
                     ->label('Nama Calon Siswa')
                     ->searchable()
@@ -125,10 +144,35 @@ class PendaftaranResource extends Resource
                 Tables\Columns\TextColumn::make('calonSiswa.jurusan.nama_jurusan')
                     ->label('Jurusan')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('skor_kesesuaian')
+                    ->label('Skor SMART')
+                    ->numeric()
+                    ->sortable()
+                    ->fontFamily('mono')
+                    ->weight('bold')
+                    ->color(fn (int $state): string => match (true) {
+                        $state >= 80 => 'success',
+                        $state >= 70 => 'warning',
+                        default => 'danger',
+                    }),
+                Tables\Columns\TextColumn::make('rekomendasi')
+                    ->label('Rekomendasi SMART')
+                    ->state(function (Pendaftaran $record): string {
+                        $service = new \App\Services\SmartEvaluationService();
+                        return $service->getRecommendationStatus($record->skor_kesesuaian ?? 0.0);
+                    })
+                    ->badge()
+                    ->color(fn (string $state): string => match (true) {
+                        str_contains($state, 'Sangat') => 'success',
+                        str_contains($state, 'Layak') => 'warning',
+                        default => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('tanggal_pendaftaran')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('status_akhir')
+                    ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Menunggu' => 'gray',
@@ -136,25 +180,17 @@ class PendaftaranResource extends Resource
                         'Diterima' => 'success',
                         'Ditolak' => 'danger',
                     }),
-                Tables\Columns\TextColumn::make('target_waktu_proses')
-                    ->numeric()
-                    ->suffix(' hari')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('waktu_pemrosesan_aktual')
-                    ->numeric()
-                    ->suffix(' hari')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('skor_kesesuaian')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('semester_target_masuk')
+                    ->label('Semester')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('skor_kesesuaian', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('status_akhir')
                     ->options([
@@ -174,8 +210,40 @@ class PendaftaranResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('terima')
+                        ->label('Terima Siswa')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->visible(fn (Pendaftaran $record): bool => in_array($record->status_akhir, ['Menunggu', 'Diproses']))
+                        ->action(function (Pendaftaran $record) {
+                            $record->update(['status_akhir' => 'Diterima']);
+                            // Observer Pendaftaran akan otomatis mensinkronisasi CalonSiswa & total_siswa di Jurusan!
+                            \Filament\Notifications\Notification::make()
+                                ->title('Siswa Diterima')
+                                ->body("Siswa {$record->calonSiswa->nama_lengkap} berhasil diterima di jurusan {$record->calonSiswa->jurusan->nama_jurusan}.")
+                                ->success()
+                                ->send();
+                        }),
+                    Tables\Actions\Action::make('tolak')
+                        ->label('Tolak Siswa')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(fn (Pendaftaran $record): bool => in_array($record->status_akhir, ['Menunggu', 'Diproses']))
+                        ->action(function (Pendaftaran $record) {
+                            $record->update(['status_akhir' => 'Ditolak']);
+                            // Observer Pendaftaran akan otomatis mensinkronisasi CalonSiswa!
+                            \Filament\Notifications\Notification::make()
+                                ->title('Siswa Ditolak')
+                                ->body("Siswa {$record->calonSiswa->nama_lengkap} telah ditolak.")
+                                ->danger()
+                                ->send();
+                        }),
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
