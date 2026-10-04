@@ -11,14 +11,13 @@ export function Hero() {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
-                            Metode SMART (Simple Multi Attribute Rating Technique)
+                            Penerimaan Peserta Didik Baru (PPDB)
                         </div>
                         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-white">
                             Tentukan Masa Depanmu dengan Jurusan yang Tepat
                         </h1>
                         <p className="text-gray-300 text-lg md:text-xl max-w-xl">
-                            Kami membantu kamu menemukan jurusan terbaik secara objektif dan matematis
-                            melalui **SPK Metode SMART** (Simple Multi Attribute Rating Technique) berdasarkan nilai mata pelajaran rapor Anda.
+                            Kami membantu kamu menemukan jurusan terbaik secara objektif dan terarah berdasarkan nilai mata pelajaran rapor dan potensi keahlian Anda.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3">
                             <Button onClick={() => window.location.href = '#jurusan'} size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-6 text-lg cursor-pointer">
@@ -31,17 +30,17 @@ export function Hero() {
 
                         <div className="pt-4 flex items-center gap-4">
                             <div className="flex -space-x-2">
-                                {['S', 'M', 'A', 'R', 'T'].map((letter, i) => (
+                                {['🎓', '📚', '💻', '⚙️', '🌟'].map((emoji, i) => (
                                     <div
                                         key={i}
-                                        className={`w-10 h-10 rounded-full border-2 border-white/20 bg-blue-${(i+5)*100}/40 flex items-center justify-center text-xs font-bold text-white`}
+                                        className="w-10 h-10 rounded-full border-2 border-white/20 bg-slate-800/80 flex items-center justify-center text-sm shadow-md"
                                     >
-                                        {letter}
+                                        {emoji}
                                     </div>
                                 ))}
                             </div>
                             <div className="text-gray-300 text-sm">
-                                <span className="font-bold text-white">500+ siswa</span> telah menemukan jurusan terbaik melalui SMART
+                                <span className="font-bold text-white">500+ siswa</span> telah bergabung dan meraih masa depan terbaik
                             </div>
                         </div>
                     </div>
@@ -49,7 +48,7 @@ export function Hero() {
                         <div className="absolute -top-4 -left-4 w-24 h-24 bg-blue-500/20 rounded-full blur-xl"></div>
                         <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-indigo-500/20 rounded-full blur-xl"></div>
                         <img
-                            src="./images/gedung-deces.jpeg"
+                            src="./images/deces.webp"
                             alt="Siswa belajar"
                             className="mx-auto rounded-xl object-cover object-center w-full h-[500px] shadow-2xl border border-white/10"
                         />
@@ -61,8 +60,8 @@ export function Hero() {
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-slate-800">Sistem Pendukung Keputusan</h3>
-                                    <p className="text-sm text-slate-650 font-medium">Metode SMART (Simple Multi Attribute Rating Technique)</p>
+                                    <h3 className="font-bold text-slate-800">Seleksi Berbasis Prestasi</h3>
+                                    <p className="text-sm text-slate-650 font-medium">Penilaian Objektif & Transparan</p>
                                 </div>
                             </div>
                         </div>

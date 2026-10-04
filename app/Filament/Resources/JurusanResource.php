@@ -79,16 +79,17 @@ class JurusanResource extends Resource
                     ])->columns(4),
 
 
-                Forms\Components\Section::make('SMART - Specific & Measurable')
+                Forms\Components\Section::make('Target & Kapasitas Kuota Siswa')
+                    ->description('Tentukan kapasitas dan kuota penerimaan untuk jurusan ini')
                     ->schema([
                         Forms\Components\TextInput::make('target_siswa_semester')
                             ->label('Target Siswa per Semester')
-                            ->helperText('Target jumlah siswa yang ingin dicapai per semester')
+                            ->helperText('Target jumlah siswa yang ingin dicapai')
                             ->numeric()
                             ->required(),
                         Forms\Components\TextInput::make('kuota_maksimal')
-                            ->label('Kuota Maksimal')
-                            ->helperText('Jumlah maksimal siswa yang dapat diterima per semester')
+                            ->label('Kuota Maksimal Penerimaan')
+                            ->helperText('Batas maksimal siswa yang dapat diterima')
                             ->numeric()
                             ->required(),
                         Forms\Components\TextInput::make('tingkat_kelulusan')
@@ -100,14 +101,14 @@ class JurusanResource extends Resource
                             ->suffix('%'),
                     ])->columns(3),
 
-                Forms\Components\Section::make('SMART - Achievable')
+                Forms\Components\Section::make('Persyaratan & Tingkat Kesulitan')
                     ->schema([
                         Forms\Components\Textarea::make('persyaratan_masuk')
                             ->label('Persyaratan Masuk')
-                            ->helperText('Persyaratan yang harus dipenuhi calon siswa')
+                            ->helperText('Persyaratan kompetensi atau berkas yang harus dipenuhi calon siswa')
                             ->columnSpanFull(),
                         Forms\Components\Select::make('tingkat_kesulitan')
-                            ->label('Tingkat Kesulitan')
+                            ->label('Tingkat Kesulitan Materi')
                             ->options([
                                 '1' => '1 - Sangat Mudah',
                                 '2' => '2 - Mudah',
@@ -118,19 +119,19 @@ class JurusanResource extends Resource
                             ->required(),
                     ])->columns(2),
 
-                Forms\Components\Section::make('SMART - Relevant')
+                Forms\Components\Section::make('Prospek Karir & Relevansi Industri')
                     ->schema([
                         Forms\Components\Textarea::make('prospek_karir')
-                            ->label('Prospek Karir')
-                            ->helperText('Prospek karir lulusan dari jurusan ini')
+                            ->label('Prospek Karir Lulusan')
+                            ->helperText('Peluang karir atau industri kerja yang sesuai untuk lulusan jurusan ini')
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('SMART - Time-bound')
+                Forms\Components\Section::make('Jadwal & Periode Pendaftaran')
                     ->schema([
                         Forms\Components\TextInput::make('durasi_program')
                             ->label('Durasi Program (bulan)')
-                            ->helperText('Durasi program dalam bulan')
+                            ->helperText('Durasi pembelajaran dalam bulan')
                             ->numeric()
                             ->required(),
                         Forms\Components\DatePicker::make('tanggal_buka_pendaftaran')

@@ -19,10 +19,11 @@ class SmartEvaluationService
      * @param CalonSiswa $calonSiswa
      * @return float
      */
-    public function calculateScore(CalonSiswa $calonSiswa): float
+    /**
+     * Menghitung skor SMART untuk calon siswa pada jurusan tertentu.
+     */
+    public function calculateScoreForJurusan(CalonSiswa $calonSiswa, ?Jurusan $jurusan): float
     {
-        $jurusan = $calonSiswa->jurusan;
-
         if (!$jurusan) {
             return 0.0;
         }
@@ -50,31 +51,107 @@ class SmartEvaluationService
             $totalBobot = 100;
         }
 
-        // 3. Normalisasi bobot kriteria (Normalized Weights)
-        // sum(norm_w) = 1.0
+        // 3. Normalisasi bobot kriteria (Normalized Weights: sum = 1.0)
         $normMat = $wMat / $totalBobot;
         $normIpa = $wIpa / $totalBobot;
         $normBahasa = $wBahasa / $totalBobot;
         $normIps = $wIps / $totalBobot;
 
-        // 4. Hitung Nilai Utilitas (Utility Values)
-        // Nilai Rapor berskala 0 s.d 100.
-        // Dengan batas minimal kelulusan (C_min/KKM) = 50 dan batas maksimal (C_max) = 100:
-        // U_i = ((nilai - C_min) / (C_max - C_min)) * 100
-        // U_i = ((nilai - 50) / 50) * 100 = (nilai - 50) * 2
+        // 4. Hitung Nilai Utilitas (Linear Utility Function)
+        // Batas minimal KKM (C_min) = 50, Batas maksimal (C_max) = 100
         $uMat = $nilaiMatematika >= 50 ? ($nilaiMatematika - 50) * 2 : 0;
         $uIpa = $nilaiIpa >= 50 ? ($nilaiIpa - 50) * 2 : 0;
         $uBahasa = $nilaiBahasa >= 50 ? ($nilaiBahasa - 50) * 2 : 0;
         $uIps = $nilaiIps >= 50 ? ($nilaiIps - 50) * 2 : 0;
 
-        // 5. Hitung Nilai Evaluasi Akhir (Total Evaluation Value)
-        // V = sum(norm_w_i * U_i)
+        // 5. Total Evaluasi SMART: V = sum(w_i * U_i)
         $finalScore = ($normMat * $uMat) + 
                      ($normIpa * $uIpa) + 
                      ($normBahasa * $uBahasa) + 
                      ($normIps * $uIps);
 
         return round($finalScore, 2);
+    }
+
+    /**
+     * Menghitung skor SMART (Simple Multi-Attribute Rating Technique) untuk calon siswa pada jurusan pilihannya.
+     * 
+     * @param CalonSiswa $calonSiswa
+     * @return float
+     */
+    public function calculateScore(CalonSiswa $calonSiswa): float
+    {
+        return $this->calculateScoreForJurusan($calonSiswa, $calonSiswa->jurusan);
+    }
+
+    /**
+     * Mencari jurusan alternatif terbaik untuk calon siswa berdasarkan skor SMART tertinggi di jurusan lain.
+     *
+     * @param CalonSiswa $calonSiswa
+     * @return array|null [ 'jurusan' => Jurusan, 'score' => float, 'status' => string ]
+     */
+    public function getBestAlternativeJurusan(CalonSiswa $calonSiswa): ?array
+    {
+        $otherJurusans = Jurusan::where('id', '!=', $calonSiswa->jurusan_id)->get();
+        if ($otherJurusans->isEmpty()) {
+            return null;
+        }
+
+        $best = null;
+        $highestScore = -1.0;
+
+        foreach ($otherJurusans as $jurusan) {
+            $score = $this->calculateScoreForJurusan($calonSiswa, $jurusan);
+            if ($score > $highestScore) {
+                $highestScore = $score;
+                $best = $jurusan;
+            }
+        }
+
+        if (!$best) {
+            return null;
+        }
+
+        return [
+            'jurusan' => $best,
+            'score' => $highestScore,
+            'status' => $this->getRecommendationStatus($highestScore),
+        ];
+    }
+
+    /**
+     * Menghitung ulang seluruh skor SMART pendaftaran di database (misalnya setelah admin mengubah bobot jurusan).
+     *
+     * @return int Jumlah pendaftaran yang berhasil diperbarui
+     */
+    public function recalculateAll(): int
+    {
+        $calonSiswas = CalonSiswa::with(['jurusan', 'pendaftaran'])->get();
+        $count = 0;
+
+        foreach ($calonSiswas as $calonSiswa) {
+            $score = $this->calculateScore($calonSiswa);
+            $pendaftaran = $calonSiswa->pendaftaran;
+
+            if ($pendaftaran) {
+                $pendaftaran->skor_kesesuaian = $score;
+                $pendaftaran->peluang_keberhasilan = $score;
+
+                if ($score < 70) {
+                    $alt = $this->getBestAlternativeJurusan($calonSiswa);
+                    if ($alt) {
+                        $pendaftaran->rekomendasi_jurusan_alt = "{$alt['jurusan']->nama_jurusan} (Skor: {$alt['score']})";
+                    }
+                } else {
+                    $pendaftaran->rekomendasi_jurusan_alt = null;
+                }
+
+                $pendaftaran->saveQuietly();
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     /**

@@ -146,10 +146,10 @@ export function SmartCalculator({ jurusans = [] }: SmartCalculatorProps) {
                         <Calculator className="w-8 h-8" />
                     </div>
                     <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-                        Simulasi SPK SMART
+                        Simulasi Kelayakan Jurusan
                     </h2>
                     <p className="mx-auto max-w-[700px] text-slate-400 md:text-lg">
-                        Gunakan simulator ini untuk melihat bagaimana rumus keputusan **SMART** merangking kelayakan pendaftaran Anda secara transparan dan instan.
+                        Gunakan simulator ini untuk melihat estimasi peluang dan kecocokan pendaftaran Anda berdasarkan nilai rapor secara instan dan transparan.
                     </p>
                 </div>
 

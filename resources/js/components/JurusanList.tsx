@@ -183,56 +183,56 @@ export function JurusanList({ jurusans = [] }: JurusanListProps) {
                     </p>
                 </div>
 
-                {/* Penjelasan SMART */}
+                {/* Keunggulan Sistem Seleksi */}
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl mt-8 mb-12 border border-white/10 shadow-xl">
-                    <h3 className="text-2xl font-bold mb-6 text-center text-white">Metode SMART (Simple Multi Attribute Rating Technique)</h3>
+                    <h3 className="text-2xl font-bold mb-6 text-center text-white">Sistem Penilaian Terpadu & Transparan</h3>
                     <p className="text-gray-300 text-center mb-8 max-w-4xl mx-auto">
-                        Sistem pendukung keputusan kami menggunakan model matematika **SMART** untuk mengukur kecocokan akademis calon siswa terhadap kriteria unggulan tiap jurusan.
+                        Sistem pendaftaran kami mengevaluasi kecocokan akademis calon siswa terhadap mata pelajaran unggulan di setiap jurusan secara objektif dan berkeadilan.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                         <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 p-6 rounded-xl border border-blue-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-blue-500/20 text-blue-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">S</span>
-                                <h4 className="font-bold text-lg text-blue-300">Simple</h4>
+                                <span className="bg-blue-500/20 text-blue-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">1</span>
+                                <h4 className="font-bold text-lg text-blue-300">Objektif</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Pembobotan kriteria yang sederhana, transparan, dan mudah dipahami oleh calon siswa.
+                                Penilaian murni berbasis nilai rapor dan kriteria kejuruan yang transparan.
                             </p>
                         </div>
                         <div className="bg-gradient-to-br from-[#10B981]/10 to-emerald-800/20 p-6 rounded-xl border border-emerald-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-emerald-500/20 text-emerald-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">M</span>
-                                <h4 className="font-bold text-lg text-emerald-300">Multi-Attribute</h4>
+                                <span className="bg-emerald-500/20 text-emerald-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">2</span>
+                                <h4 className="font-bold text-lg text-emerald-300">Multi Kriteria</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Evaluasi pendaftaran menggunakan multi-kriteria nilai mata pelajaran utama.
+                                Evaluasi seimbang dari 4 mata pelajaran utama: Matematika, IPA, Bahasa, dan IPS.
                             </p>
                         </div>
                         <div className="bg-gradient-to-br from-violet-900/40 to-violet-800/20 p-6 rounded-xl border border-violet-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-violet-500/20 text-violet-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">A</span>
-                                <h4 className="font-bold text-lg text-violet-300">Attribute Weight</h4>
+                                <span className="bg-violet-500/20 text-violet-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">3</span>
+                                <h4 className="font-bold text-lg text-violet-300">Bobot Kejuruan</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Penentuan bobot prioritas kriteria yang disesuaikan secara adil untuk tiap jurusan.
+                                Penentuan bobot prioritas mata pelajaran yang disesuaikan secara adil untuk tiap jurusan.
                             </p>
                         </div>
                         <div className="bg-gradient-to-br from-amber-900/40 to-amber-800/20 p-6 rounded-xl border border-amber-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-amber-500/20 text-amber-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">R</span>
-                                <h4 className="font-bold text-lg text-amber-300">Rating Utility</h4>
+                                <span className="bg-amber-500/20 text-amber-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">4</span>
+                                <h4 className="font-bold text-lg text-amber-300">Standar KKM</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Menstandarisasi nilai rapor Anda menjadi nilai utilitas (skala 0 s.d 100) berdasarkan KKM.
+                                Menstandarisasi nilai rapor Anda berdasarkan batas ketuntasan minimal secara adil.
                             </p>
                         </div>
                         <div className="bg-gradient-to-br from-rose-900/40 to-rose-800/20 p-6 rounded-xl border border-rose-500/20 shadow-lg">
                             <div className="flex items-center gap-3 mb-3">
-                                <span className="bg-rose-500/20 text-rose-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">T</span>
-                                <h4 className="font-bold text-lg text-rose-300">Technique</h4>
+                                <span className="bg-rose-500/20 text-rose-300 w-8 h-8 rounded-sm flex items-center justify-center font-bold">5</span>
+                                <h4 className="font-bold text-lg text-rose-300">Hasil Instan</h4>
                             </div>
                             <p className="text-gray-300 text-sm">
-                                Teknik perangkingan objektif untuk memeringkat calon siswa secara ilmiah.
+                                Calon siswa dapat langsung mengetahui estimasi kecocokan dan rekomendasi jurusan.
                             </p>
                         </div>
                     </div>
@@ -266,11 +266,11 @@ export function JurusanList({ jurusans = [] }: JurusanListProps) {
                                             {jurusan.deskripsi}
                                         </CardDescription>
 
-                                        {/* Tampilan Bobot SMART */}
+                                        {/* Tampilan Bobot Penilaian */}
                                         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3 mb-6">
                                             <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider pb-2 border-b border-slate-800">
-                                                <span>Kriteria Evaluasi SMART</span>
-                                                <span className="text-amber-400">Bobot Penilaian</span>
+                                                <span>Bobot Nilai Rapor</span>
+                                                <span className="text-amber-400">Porsi Penilaian</span>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 text-xs">
                                                 <div className="flex justify-between items-center bg-slate-950/40 p-2 rounded border border-slate-800/40">
@@ -401,21 +401,21 @@ export function JurusanList({ jurusans = [] }: JurusanListProps) {
                                                 </p>
                                             </div>
 
-                                            {/* SMART Weights */}
+                                            {/* Bobot Penilaian Rapor */}
                                             <div className="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/80">
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <Award className="w-5 h-5 text-amber-400" />
-                                                    <h4 className="text-xs font-bold text-slate-300 tracking-wider uppercase">Sistem Penilaian & Bobot Kriteria SMART</h4>
+                                                    <h4 className="text-xs font-bold text-slate-300 tracking-wider uppercase">Bobot Prioritas Nilai Rapor</h4>
                                                 </div>
                                                 <p className="text-xs text-slate-400 mb-6 leading-relaxed">
-                                                    PPDB SMK memakai metode SMART untuk menilai rapor Anda. Setiap mata pelajaran memiliki bobot pengaruh berbeda untuk kelayakan pendaftaran jurusan ini:
+                                                    Setiap program keahlian memiliki prioritas bobot nilai mata pelajaran yang disesuaikan dengan kompetensi kejuruan:
                                                 </p>
                                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                                     {[
-                                                        { label: "C1: Matematika", weight: jurusan.bobot_matematika, color: "from-blue-500 to-indigo-600", text: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20" },
-                                                        { label: "C2: IPA", weight: jurusan.bobot_ipa, color: "from-emerald-500 to-teal-600", text: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-                                                        { label: "C3: Bahasa", weight: jurusan.bobot_bahasa, color: "from-violet-500 to-purple-600", text: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20" },
-                                                        { label: "C4: IPS", weight: jurusan.bobot_ips, color: "from-rose-500 to-pink-600", text: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20" }
+                                                        { label: "Matematika", weight: jurusan.bobot_matematika, color: "from-blue-500 to-indigo-600", text: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20" },
+                                                        { label: "IPA", weight: jurusan.bobot_ipa, color: "from-emerald-500 to-teal-600", text: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+                                                        { label: "Bahasa", weight: jurusan.bobot_bahasa, color: "from-violet-500 to-purple-600", text: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20" },
+                                                        { label: "IPS", weight: jurusan.bobot_ips, color: "from-rose-500 to-pink-600", text: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20" }
                                                     ].map((c, i) => (
                                                         <div key={i} className={`bg-slate-900/80 p-4 rounded-xl border ${c.border} flex flex-col justify-between shadow-sm`}>
                                                             <div>

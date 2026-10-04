@@ -90,8 +90,9 @@ class PendaftaranController extends Controller
                 'nama' => $calonSiswa->nama_lengkap,
                 'email' => $calonSiswa->email,
                 'jurusan' => $jurusanName,
-                'skor_smart' => $score,
+                'skor_smart' => (float) $score,
                 'status_rekomendasi' => $statusRekomendasi,
+                'rekomendasi_alt' => $pendaftaran?->rekomendasi_jurusan_alt,
                 'semester' => $calonSiswa->semester_pendaftaran,
             ];
 

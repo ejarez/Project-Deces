@@ -156,17 +156,17 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                         Formulir Pendaftaran Siswa Baru
                     </h2>
                     <p className="mx-auto max-w-[750px] text-slate-300 md:text-lg">
-                        Daftarkan diri Anda secara online. Data nilai akademis Anda akan langsung dihitung kelayakannya terhadap jurusan pilihan menggunakan metode matematis SMART.
+                        Daftarkan diri Anda secara online. Data nilai rapor Anda akan langsung dianalisis untuk melihat kesesuaian dan rekomendasi jurusan pilihan Anda.
                     </p>
                 </div>
 
                 <div className="space-y-8">
-                    {/* Panduan SMART */}
+                    {/* Panduan Kriteria Penilaian */}
                     <Card className="shadow-xl bg-slate-900/50 backdrop-blur-sm border-slate-800 text-white">
                         <CardHeader>
                             <CardTitle className="text-xl flex items-center gap-2 text-amber-400">
                                 <Award className="w-6 h-6" />
-                                Bagaimana SMART Mengevaluasi Pendaftaran Anda?
+                                Kriteria Penilaian Seleksi Jurusan
                             </CardTitle>
                             <CardDescription className="text-slate-300">
                                 Sistem kami menilai kelayakan calon siswa berdasarkan 4 kriteria nilai akademis utama. Setiap kriteria memiliki bobot kepentingan yang berbeda pada setiap jurusan:
@@ -174,19 +174,19 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                         </CardHeader>
                         <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
                             <div className="p-3 bg-slate-950/40 rounded-lg border border-slate-800/60">
-                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">C1: MATEMATIKA</span>
+                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">MATEMATIKA</span>
                                 <p className="text-xs text-slate-300">Menilai kemampuan logika, analisis numerik, dan penalaran sistematis.</p>
                             </div>
                             <div className="p-3 bg-slate-950/40 rounded-lg border border-slate-800/60">
-                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">C2: IPA</span>
+                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">IPA</span>
                                 <p className="text-xs text-slate-300">Menilai kecakapan pemahaman konsep sains dan eksperimen praktis.</p>
                             </div>
                             <div className="p-3 bg-slate-950/40 rounded-lg border border-slate-800/60">
-                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">C3: BAHASA</span>
+                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">BAHASA (INDONESIA & INGGRIS)</span>
                                 <p className="text-xs text-slate-300">Menilai kompetensi komunikasi verbal, pemahaman bacaan, dan ekspresi ide.</p>
                             </div>
                             <div className="p-3 bg-slate-950/40 rounded-lg border border-slate-800/60">
-                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">C4: IPS</span>
+                                <span className="text-slate-400 text-xs block mb-0.5 font-semibold">IPS</span>
                                 <p className="text-xs text-slate-300">Menilai wawasan sosial, kolaborasi, dan interaksi kemasyarakatan.</p>
                             </div>
                         </CardContent>
@@ -313,7 +313,7 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-2 pb-2 border-b border-slate-800/60">
                                         <Settings className="w-5 h-5 text-indigo-400" />
-                                        <h3 className="text-lg font-semibold text-indigo-400">2. Pilihan Jurusan & Evaluasi SMART</h3>
+                                        <h3 className="text-lg font-semibold text-indigo-400">2. Pilihan Program Keahlian (Jurusan)</h3>
                                     </div>
                                     <div className="space-y-3">
                                         <Label htmlFor="jurusan_id" className="text-slate-300">Pilih Jurusan yang Diinginkan</Label>
@@ -337,7 +337,7 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                                     {selectedJurusan && (
                                         <div className="bg-indigo-950/40 p-4 rounded-xl border border-indigo-500/20 text-sm space-y-2 animate-fadeIn">
                                             <p className="font-semibold text-indigo-300">
-                                                Bobot Kriteria Evaluasi SMART untuk Jurusan <span className="underline text-white font-bold">{selectedJurusan.nama_jurusan}</span>:
+                                                Prioritas Bobot Nilai untuk Jurusan <span className="underline text-white font-bold">{selectedJurusan.nama_jurusan}</span>:
                                             </p>
                                             <div className="grid grid-cols-4 gap-2 text-center text-xs">
                                                 <div className="bg-slate-950 p-2 rounded border border-slate-850">
@@ -358,7 +358,7 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                                                 </div>
                                             </div>
                                             <p className="text-[11px] text-slate-400 italic">
-                                                *Nilai utilitas dihitung berdasarkan rata-rata rapor atau nilai mata pelajaran yang Anda isi di bawah.
+                                                *Penilaian kelayakan dihitung berdasarkan kesesuaian nilai mata pelajaran yang Anda isi di bawah.
                                             </p>
                                         </div>
                                     )}
@@ -371,7 +371,7 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                                         <h3 className="text-lg font-semibold text-emerald-400">3. Nilai Rapor Semester Terakhir (Skala 0-100)</h3>
                                     </div>
                                     <p className="text-xs text-slate-400 italic">
-                                        Masukkan nilai mata pelajaran semester terakhir Anda untuk kalkulasi model SMART.
+                                        Masukkan nilai mata pelajaran semester terakhir Anda untuk evaluasi kecocokan jurusan.
                                     </p>
                                     
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -433,11 +433,11 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                                         </div>
                                     </div>
 
-                                    {/* Live SMART Preview */}
+                                    {/* Live Kelayakan Preview */}
                                     {liveSMART && (
                                         <div className="mt-5 p-4 bg-slate-950/80 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 animate-fadeIn">
                                             <div className="space-y-1 text-center sm:text-left">
-                                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Estimasi Skor Kelayakan SMART Anda</h4>
+                                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Estimasi Skor Kelayakan Anda</h4>
                                                 <p className="text-2xl font-black text-white">
                                                     {liveSMART.total} <span className="text-xs font-normal text-slate-400">/ 100</span>
                                                 </p>
@@ -456,10 +456,10 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-2 pb-2 border-b border-slate-800/60">
                                         <FileText className="w-5 h-5 text-amber-400" />
-                                        <h3 className="text-lg font-semibold text-amber-400">4. Profil Minat, Bakat, & Cita-Cita (Kualitatif)</h3>
+                                        <h3 className="text-lg font-semibold text-amber-400">4. Profil Minat, Bakat, & Cita-Cita</h3>
                                     </div>
                                     <p className="text-xs text-slate-400 italic">
-                                        Isian kualitatif ini membantu sekolah memahami tujuan, motivasi belajar, dan rencana masa depan Anda (tidak mempengaruhi skor matematis SMART).
+                                        Isian ini membantu sekolah memahami minat, motivasi belajar, dan rencana masa depan Anda.
                                     </p>
 
                                     <div className="space-y-4">
@@ -536,7 +536,7 @@ export function PendaftaranForm({ jurusans = [] }: PendaftaranFormProps) {
                                         disabled={processing}
                                         className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-lg font-bold rounded-xl shadow-lg hover:shadow-indigo-500/20 cursor-pointer"
                                     >
-                                        {processing ? "Memproses & Menghitung SMART Score..." : "Kirim Formulir Pendaftaran"}
+                                        {processing ? "Memproses Pendaftaran..." : "Kirim Formulir Pendaftaran"}
                                     </Button>
                                 </div>
                             </form>

@@ -63,17 +63,15 @@ class CalonSiswa extends Model
             }
 
             $pendaftaran->skor_kesesuaian = $score;
-            $pendaftaran->peluang_keberhasilan = (int) $score;
+            $pendaftaran->peluang_keberhasilan = $score;
             $pendaftaran->semester_target_masuk = $calonSiswa->semester_pendaftaran ?? 'Ganjil 2024/2025';
             $pendaftaran->target_waktu_proses = $pendaftaran->target_waktu_proses ?? 7;
 
-            // Atur rekomendasi jurusan alternatif jika skor kurang
+            // Atur rekomendasi jurusan alternatif berbasis perhitungan SMART terbaik jika skor utama < 70
             if ($score < 70) {
-                $altJurusan = Jurusan::where('id', '!=', $calonSiswa->jurusan_id)
-                    ->orderBy('target_siswa_semester', 'desc')
-                    ->first();
-                if ($altJurusan) {
-                    $pendaftaran->rekomendasi_jurusan_alt = $altJurusan->nama_jurusan;
+                $alt = $service->getBestAlternativeJurusan($calonSiswa);
+                if ($alt) {
+                    $pendaftaran->rekomendasi_jurusan_alt = "{$alt['jurusan']->nama_jurusan} (Skor: {$alt['score']})";
                 }
             } else {
                 $pendaftaran->rekomendasi_jurusan_alt = null;

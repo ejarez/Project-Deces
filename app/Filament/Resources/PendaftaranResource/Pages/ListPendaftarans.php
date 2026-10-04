@@ -13,7 +13,23 @@ class ListPendaftarans extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\Action::make('hitung_ulang_smart')
+                ->label('Hitung Ulang Skor SMART')
+                ->icon('heroicon-o-calculator')
+                ->color('info')
+                ->requiresConfirmation()
+                ->modalHeading('Hitung Ulang Seluruh Skor SMART')
+                ->modalDescription('Aksi ini akan menghitung ulang nilai utilitas dan skor kesesuaian seluruh calon siswa berdasarkan bobot kriteria jurusan terbaru saat ini.')
+                ->action(function () {
+                    $service = new \App\Services\SmartEvaluationService();
+                    $count = $service->recalculateAll();
+
+                    \Filament\Notifications\Notification::make()
+                        ->title('Kalkulasi SMART Berhasil')
+                        ->body("Sebanyak {$count} data pendaftaran berhasil dihitung ulang dan disinkronkan.")
+                        ->success()
+                        ->send();
+                }),
         ];
     }
 }

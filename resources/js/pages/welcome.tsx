@@ -35,6 +35,7 @@ interface SuccessData {
     jurusan: string;
     skor_smart: number;
     status_rekomendasi: string;
+    rekomendasi_alt?: string | null;
     semester: string;
 }
 
@@ -70,7 +71,7 @@ export default function Welcome({ jurusans, flash }: WelcomeProps) {
             <PendaftaranForm jurusans={jurusans} />
             <Footer />
 
-            {/* Modal Sukses Kalkulasi SMART */}
+            {/* Modal Sukses Pendaftaran & Analisis Kelayakan */}
             {successData && (
                 <Dialog open={isSuccessOpen} onOpenChange={setIsSuccessOpen}>
                     <DialogContent className="max-w-lg bg-slate-900 border border-slate-800 text-white rounded-2xl p-6 shadow-2xl">
@@ -80,7 +81,7 @@ export default function Welcome({ jurusans, flash }: WelcomeProps) {
                             </div>
                             <DialogTitle className="text-2xl font-bold text-emerald-400">Pendaftaran Berhasil!</DialogTitle>
                             <DialogDescription className="text-slate-400 mt-1">
-                                Data pendaftaran Anda telah berhasil disimpan dan dievaluasi menggunakan metode SMART.
+                                Data pendaftaran Anda telah berhasil disimpan dan nilai rapor Anda telah dianalisis.
                             </DialogDescription>
                         </DialogHeader>
 
@@ -102,11 +103,11 @@ export default function Welcome({ jurusans, flash }: WelcomeProps) {
                                 <span className="font-medium text-slate-300 text-sm">{successData.semester}</span>
                             </div>
 
-                            {/* Section Perhitungan SMART */}
+                            {/* Section Perhitungan Kelayakan */}
                             <div className="mt-4 pt-2">
                                 <div className="flex items-center gap-2 mb-3">
                                     <Award className="w-5 h-5 text-amber-400" />
-                                    <h4 className="text-sm font-bold text-amber-400 uppercase tracking-wider">Hasil Evaluasi SMART</h4>
+                                    <h4 className="text-sm font-bold text-amber-400 uppercase tracking-wider">Hasil Analisis Kelayakan</h4>
                                 </div>
                                 
                                 <div className="grid grid-cols-2 gap-4">
@@ -132,6 +133,15 @@ export default function Welcome({ jurusans, flash }: WelcomeProps) {
                                         </Badge>
                                     </div>
                                 </div>
+
+                                {successData.rekomendasi_alt && (
+                                    <div className="mt-4 p-3 bg-blue-950/40 rounded-lg border border-blue-500/20 text-xs">
+                                        <span className="text-blue-300 font-semibold block mb-0.5">Saran Jurusan Alternatif:</span>
+                                        <p className="text-slate-300">
+                                            Berdasarkan analisis nilai mata pelajaran Anda, jurusan alternatif yang paling direkomendasikan adalah: <strong className="text-white font-bold">{successData.rekomendasi_alt}</strong>.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
